@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Don't Shoot the Newsbearer</title>
+<meta name="description" content="A 45-minute climate storytelling game for groups of three: a newsbearer, a character and a referee.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&amp;family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#rules">Skip to the rules</a>
+
+<header class="masthead wrap">
+  <p class="eyebrow">Climate communication workshop</p>
+  <h1>Don't Shoot the Newsbearer</h1>
+  <p class="lede">A storytelling game for groups of three. Everyone opens this page on their own phone and presses the button for their role.</p>
+</header>
+
+<main>
+  <section class="wrap picker" aria-labelledby="pick-title">
+    <h2 id="pick-title" class="visually-hidden">Choose your role</h2>
+    <div class="roles" role="group" aria-labelledby="pick-title">
+      <button type="button" class="role" id="btn-news" data-role="news" aria-pressed="false" aria-controls="stage">
+        <span class="role-top">
+          <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect x="4" y="7" width="28" height="22" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M9 13h18M9 18h8M9 23h8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="20" y="17" width="7" height="7" rx="1" fill="currentColor"/></svg>
+          <span class="role-state" aria-hidden="true">Your role</span>
+        </span>
+        <span class="role-name">I am a newsbearer</span>
+        <span class="role-hint">Draw a climate story</span>
+      </button>
+      <button type="button" class="role" id="btn-character" data-role="character" aria-pressed="false" aria-controls="stage">
+        <span class="role-top">
+          <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false"><circle cx="18" cy="13" r="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M7 31c1.6-6.2 5.6-9.5 11-9.5s9.4 3.3 11 9.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <span class="role-state" aria-hidden="true">Your role</span>
+        </span>
+        <span class="role-name">I am a character</span>
+        <span class="role-hint">Draw who you'll play</span>
+      </button>
+      <button type="button" class="role" id="btn-referee" data-role="referee" aria-pressed="false" aria-controls="stage">
+        <span class="role-top">
+          <svg viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect x="6" y="8" width="14" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-10 13 18)"/><rect x="16" y="8" width="14" height="20" rx="2" fill="currentColor" transform="rotate(9 23 18)"/></svg>
+          <span class="role-state" aria-hidden="true">Your role</span>
+        </span>
+        <span class="role-name">I am a referee</span>
+        <span class="role-hint">Get the cards and the clock</span>
+      </button>
+    </div>
+    <p class="picker-note">Press your button again to draw a different card.</p>
+  </section>
+
+  <section id="stage" class="wrap stage" aria-label="Your card" hidden>
+
+    <!-- Newsbearer -->
+    <article class="card news-card" id="panel-news" aria-labelledby="news-headline" hidden>
+      <div class="card-top">
+        <span class="chip" id="news-topic"></span>
+        <span class="meta" id="news-date"></span>
+      </div>
+      <h2 id="news-headline" tabindex="-1"></h2>
+      <p class="snapshot" id="news-snapshot"></p>
+      <p class="source">Source: <a id="news-link" href="#" target="_blank" rel="noopener"><span id="news-source"></span><span class="visually-hidden"> (opens in a new tab)</span></a></p>
+      <div class="brief">
+        <p class="label">Tell it in three steps</p>
+        <ol class="flow">
+          <li>My why</li>
+          <li>Your world</li>
+          <li>One thing</li>
+        </ol>
+        <p>Use your own words. Leave out numbers and jargon unless the character asks.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="news-next">Draw another story</button>
+        <span class="count" id="news-count"></span>
+      </div>
+    </article>
+
+    <!-- Character -->
+    <article class="card char-card" id="panel-character" aria-labelledby="char-name" hidden>
+      <div class="char-head">
+        <p class="meta"><span id="char-pronouns"></span>, age <span id="char-age"></span></p>
+        <h2 id="char-name" tabindex="-1"></h2>
+        <p class="char-role"><span id="char-role"></span>, <span id="char-place"></span></p>
+      </div>
+      <p class="tagline" id="char-tagline"></p>
+      <figure class="opening">
+        <figcaption class="label">Opening line</figcaption>
+        <blockquote class="quote"><p id="char-opening"></p></blockquote>
+      </figure>
+      <dl class="stats" id="char-stats"></dl>
+      <p class="never"><span class="label">Never without</span> <span id="char-never"></span></p>
+      <div class="secret">
+        <div class="secret-head">
+          <button type="button" class="btn btn-quiet" id="secret-toggle" aria-expanded="false" aria-controls="secret-body">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            <span id="secret-label">Show triggers and door openers</span>
+          </button>
+          <p class="secret-note">For the character and the referee only. Newsbearer, look away.</p>
+        </div>
+        <div id="secret-body" hidden>
+          <div class="secret-cols">
+            <div>
+              <h3>Triggers</h3>
+              <ul id="char-triggers"></ul>
+              <p class="hint">If the newsbearer hits one, get defensive. The referee shows red.</p>
+            </div>
+            <div>
+              <h3>Door openers</h3>
+              <ul id="char-doors"></ul>
+              <p class="hint">If the newsbearer finds one, open up a little.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="char-next">Draw another character</button>
+        <span class="count" id="char-count"></span>
+      </div>
+    </article>
+
+    <!-- Referee -->
+    <div class="ref-grid" id="panel-referee" hidden>
+      <section class="card" aria-labelledby="clock-title">
+        <h2 id="clock-title" tabindex="-1">Talk clock</h2>
+        <p class="clock" id="clock" role="timer" aria-atomic="true">5:00</p>
+        <p class="clock-note">Five minutes for the conversation.</p>
+        <div class="actions">
+          <button type="button" class="btn" id="clock-toggle">Start</button>
+          <button type="button" class="btn btn-quiet" id="clock-reset">Reset</button>
+        </div>
+        <p class="visually-hidden" id="clock-status" aria-live="polite"></p>
+      </section>
+
+      <section class="card" aria-labelledby="cards-title">
+        <h2 id="cards-title">Cards</h2>
+        <div class="pen-row">
+          <button type="button" class="pen pen-yellow" id="show-yellow">
+            <svg viewBox="0 0 26 34" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+            Yellow card
+          </button>
+          <button type="button" class="pen pen-red" id="show-red">
+            <svg viewBox="0 0 26 34" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+            Red card
+          </button>
+        </div>
+        <p class="tally" id="tally">Yellow cards this round: 0. Red cards: 0.</p>
+        <div class="offences">
+          <div>
+            <p class="label">Yellow for</p>
+            <ul>
+              <li>A statistic nobody asked for</li>
+              <li>Jargon or acronyms</li>
+              <li>30 seconds without a question</li>
+              <li>"You should" or "you need to"</li>
+              <li>Doom</li>
+            </ul>
+          </div>
+          <div>
+            <p class="label">Red for</p>
+            <ul>
+              <li>A second yellow</li>
+              <li>Hitting a trigger</li>
+              <li>Blaming or mocking</li>
+              <li>Arguing with a feeling</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card ref-verdict" aria-labelledby="verdict-title">
+        <h2 id="verdict-title">Verdict</h2>
+        <form class="verdict-form" id="verdict-form">
+          <fieldset>
+            <legend>The newsbearer used</legend>
+            <label class="check"><input type="checkbox" id="v-why"> My why</label>
+            <label class="check"><input type="checkbox" id="v-world"> Your world</label>
+            <label class="check"><input type="checkbox" id="v-thing"> One thing</label>
+          </fieldset>
+          <fieldset>
+            <legend>The one thing has</legend>
+            <label class="check"><input type="checkbox" id="v-motive" data-mmo="motive"> Motive</label>
+            <label class="check"><input type="checkbox" id="v-means" data-mmo="means"> Means</label>
+            <label class="check"><input type="checkbox" id="v-opportunity" data-mmo="opportunity"> Opportunity</label>
+          </fieldset>
+          <fieldset>
+            <legend>Would the character do it?</legend>
+            <label class="check"><input type="radio" name="answer" id="v-yes" value="yes"> Yes</label>
+            <label class="check"><input type="radio" name="answer" id="v-maybe" value="maybe"> Maybe</label>
+            <label class="check"><input type="radio" name="answer" id="v-no" value="no"> No</label>
+          </fieldset>
+        </form>
+        <p class="verdict-result" id="verdict-result" aria-live="polite">Waiting for the character's answer.</p>
+        <div class="actions">
+          <button type="button" class="btn" id="new-round">Start a new round</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section id="rules" class="wrap rules" aria-labelledby="rules-title" tabindex="-1">
+    <header>
+      <h2 id="rules-title">How to play</h2>
+      <p class="rules-lede">Play in threes. Each round, one person brings the news, one plays a character and one referees. Swap after every round so everyone plays all three roles.</p>
+    </header>
+
+    <div class="rule-block">
+      <h3>The roles</h3>
+      <div class="role-rules">
+        <section>
+          <h4>Newsbearer</h4>
+          <p>Draw a story and read the snapshot. Share it with the character in a personal, relatable way, using the three steps below. You win the round if the character says yes to your one thing and you get no red card.</p>
+        </section>
+        <section>
+          <h4>Character</h4>
+          <p>Draw a character and read out the front of the card: name, age, job and scores. Show the triggers and door openers to the referee only. Start the round with your opening line, then stay in role: open up when the newsbearer finds a door opener and push back when they hit a trigger.</p>
+        </section>
+        <section>
+          <h4>Referee</h4>
+          <p>Read the character's triggers and door openers. Run the five-minute clock, hold up cards when the newsbearer slips, and call the verdict at the end.</p>
+        </section>
+      </div>
+      <p>The story and the character are drawn separately, at random.</p>
+    </div>
+
+    <div class="rule-block">
+      <h3>The conversation, in order</h3>
+      <ol class="steps">
+        <li>
+          <h4>My why</h4>
+          <p>Open with why you care, through a moment from your own life that connects to the story. A few sentences is enough.</p>
+          <p class="cite">Based on Simon Sinek, Start with Why</p>
+        </li>
+        <li>
+          <h4>Your world</h4>
+          <p>Ask about the character's life and listen for what they feel and what they need. Show them you heard it.</p>
+          <p class="cite">Based on Marshall Rosenberg, Nonviolent Communication</p>
+        </li>
+        <li>
+          <h4>One thing</h4>
+          <p>Ask for one action. It has to pass the detective test.</p>
+          <dl class="mmo">
+            <dt>Motive</dt><dd>They care about it, for their own reasons.</dd>
+            <dt>Means</dt><dd>They have the money, time and skills.</dd>
+            <dt>Opportunity</dt><dd>They could do it this week.</dd>
+          </dl>
+          <p>Detectives use motive, means and opportunity to work out who could have committed a crime. Here you're planning a small act of climate action, and the character is your accomplice.</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="rule-block">
+      <h3>Cards</h3>
+      <div class="card-rules">
+        <section>
+          <div class="card-title"><span class="swatch swatch-yellow" aria-hidden="true"></span><h4>Yellow card: a warning</h4></div>
+          <p>The newsbearer keeps going and drops whatever earned the card.</p>
+          <ul>
+            <li>A statistic or number the character didn't ask for</li>
+            <li>Jargon or acronyms, such as net zero, mitigation, decarbonise, carbon footprint, COP or IPCC</li>
+            <li>Talking for 30 seconds without asking a question</li>
+            <li>Telling them what to do: "you should", "you need to"</li>
+            <li>Doom: "it's too late", "we're all doomed"</li>
+          </ul>
+        </section>
+        <section>
+          <div class="card-title"><span class="swatch swatch-red" aria-hidden="true"></span><h4>Red card: stop and repair</h4></div>
+          <p>The newsbearer stops the story and repairs the conversation before going on.</p>
+          <ul>
+            <li>A second yellow card</li>
+            <li>Hitting one of the character's triggers</li>
+            <li>Blaming, mocking or shaming the character</li>
+            <li>Arguing with how they feel</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <h3>Repair after a red card</h3>
+      <p>Say what you think the character feels and needs, then check you got it right.</p>
+      <blockquote class="script"><p>"It sounds like you're [feeling] because [need] matters to you. Is that right?"</p></blockquote>
+      <p>Wait for the answer. If they say no, try again. Carry on once they agree you've understood.</p>
+    </div>
+
+    <div class="rule-block">
+      <h3>End of the round</h3>
+      <ul class="plain-list">
+        <li>The character answers: would you do it? Yes, maybe or no. If it isn't a yes, they say which was missing: motive, means or opportunity.</li>
+        <li>The referee names one moment that worked and one to replay.</li>
+      </ul>
+    </div>
+
+    <div class="rule-block">
+      <h3>45 minutes</h3>
+      <div class="table-wrap">
+        <table class="timeline">
+          <thead>
+            <tr><th scope="col">Starts at</th><th scope="col">Length</th><th scope="col">What happens</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0:00</td><td>5 min</td><td>Get into threes and read these rules.</td></tr>
+            <tr><td>0:05</td><td>10 min</td><td>Round 1. Two minutes to draw and prepare, five to talk, three for the verdict.</td></tr>
+            <tr><td>0:15</td><td>10 min</td><td>Round 2. Swap roles and draw new cards.</td></tr>
+            <tr><td>0:25</td><td>10 min</td><td>Round 3. Swap again, so everyone has played every role.</td></tr>
+            <tr><td>0:35</td><td>10 min</td><td>Whole-room debrief.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <h3>Debrief questions</h3>
+      <ol class="plain-list">
+        <li>Which one thing would you actually do this week?</li>
+        <li>What earned a red card, and what repaired it?</li>
+        <li>Who in your own life is most like your character? What will you say to them now?</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap site-foot">
+  <p>Each news snapshot summarises a report or study from the organisation named on the card. Follow the source link for the full story. Stories checked in October 2026.</p>
+  <p>All characters are fictional.</p>
+</footer>
+
+<dialog class="penalty" id="penalty" aria-labelledby="penalty-title">
+  <div class="penalty-inner">
+    <p class="penalty-kicker" id="penalty-kicker" hidden></p>
+    <h2 id="penalty-title">Yellow card</h2>
+    <p class="penalty-text" id="penalty-text"></p>
+    <p class="penalty-script" id="penalty-script" hidden>"It sounds like you're [feeling] because [need] matters to you. Is that right?"</p>
+    <button type="button" class="penalty-close" id="penalty-close">Back to the game</button>
+  </div>
+</dialog>
+
+<script src="data/news.js"></script>
+<script src="data/characters.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

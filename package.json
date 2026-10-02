@@ -1,0 +1,13 @@
+{
+  "name": "dont-shoot-the-newsbearer",
+  "private": true,
+  "description": "Climate storytelling game for a 45-minute workshop. Static site, no build step.",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/a11y.mjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "playwright": "1.56.1"
+  }
+}
