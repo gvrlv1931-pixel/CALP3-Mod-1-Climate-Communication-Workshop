@@ -1,4 +1,4 @@
-# Don't Shoot the Newsbearer
+# Don't Kill the Messenger
 
 A 45-minute climate storytelling game for groups of three, built as a single static web page for the climate communication workshop (Module 1).
 
