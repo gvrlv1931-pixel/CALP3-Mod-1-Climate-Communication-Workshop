@@ -1,3 +1,3 @@
 # CALP3-Mod-1-Climate-Communication-Workshop
-This is the game, including its instructions and character sets, designed for the Climate Action Leadership Programme
-Here you can find the news, the character sets, and the instructions to the game, as well as additional resources if you might be curious to take this further. 
+This is the Climate Storytelling and Communication game designed for the Climate Action Leadership Programme. 
+Here you can find the instructions to the game, character sets, and the news that will help you spark those conversations. The page also includes additional resources if you are interested to snoop around for some more inspiration on climate communications. 
