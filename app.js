@@ -291,6 +291,9 @@
   var reds = 0;
   var lastTrigger = null;
   var dialog = $("penalty");
+  var PENALTY_SECONDS = 5;
+  var penaltyTimer = null;
+  var penaltyLeft = 0;
 
   function renderTally() {
     $("tally").textContent = "Yellow cards this round: " + yellows + ". Red cards: " + reds + ".";
@@ -308,6 +311,15 @@
       ? "Stop the story. Repair the conversation before you go on."
       : "Warning. Keep going, and drop whatever earned this card.";
     $("penalty-script").hidden = !isRed;
+    $("penalty-count").textContent = "Yellows this round: " + yellows + ". Reds this round: " + reds + ".";
+    penaltyLeft = PENALTY_SECONDS;
+    $("penalty-close").textContent = "Back to the game (" + penaltyLeft + ")";
+    if (penaltyTimer) window.clearInterval(penaltyTimer);
+    penaltyTimer = window.setInterval(function () {
+      penaltyLeft -= 1;
+      if (penaltyLeft <= 0) { closePenalty(); return; }
+      $("penalty-close").textContent = "Back to the game (" + penaltyLeft + ")";
+    }, 1000);
     if (typeof dialog.showModal === "function") {
       dialog.showModal();
     } else {
@@ -317,11 +329,16 @@
   }
 
   function closePenalty() {
+    if (penaltyTimer) window.clearInterval(penaltyTimer);
+    penaltyTimer = null;
+    if (!dialog.open) return;
     if (typeof dialog.close === "function") dialog.close();
     else dialog.removeAttribute("open");
   }
 
   dialog.addEventListener("close", function () {
+    if (penaltyTimer) window.clearInterval(penaltyTimer);
+    penaltyTimer = null;
     if (lastTrigger) lastTrigger.focus();
   });
   $("penalty-close").addEventListener("click", closePenalty);

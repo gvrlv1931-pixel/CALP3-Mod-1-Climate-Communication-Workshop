@@ -183,7 +183,10 @@ for (const scheme of SCHEMES) {
     const kicker = await page.textContent("#penalty-kicker");
     if (!kicker.includes("Second yellow")) failures.push(`${label("second yellow")}: did not turn red`);
     await runAxe(page, label("red card overlay"));
-    await page.click("#penalty-close");
+    const counted = await page.textContent("#penalty-count");
+    if (!counted.includes("Reds this round: 1")) failures.push(`${label("red overlay")}: card not counted (${counted})`);
+    await page.waitForTimeout(5600);
+    if (await page.evaluate(() => document.getElementById("penalty").open)) failures.push(`${label("red overlay")}: did not close by itself after 5 seconds`);
 
     // 6. WCAG 1.4.12 text spacing: the page must not break with wider spacing
     await page.addStyleTag({ content: "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }" });

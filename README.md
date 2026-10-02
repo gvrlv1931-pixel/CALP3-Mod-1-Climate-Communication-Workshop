@@ -4,8 +4,8 @@ A 45-minute climate storytelling game for groups of three, built as a single sta
 
 Each player opens the page on their own phone and presses their role:
 
-- **I am a newsbearer** draws a climate news snapshot (69 stories, each linked to its source).
-- **I am a character** draws one of 20 characters living across Scotland, with an opening line, scores for scepticism, time, wallet and reach, and hidden triggers and door openers.
+- **I am a newsbearer** draws a climate news snapshot (69 stories, each linked to its source). It works as a prompt: newsbearers can weave it in for an extra challenge or stick to their own personal story.
+- **I am a character** draws one of 29 characters living across Scotland, with an opening line, scores for scepticism, time, wallet and reach, and hidden triggers and door openers.
 - **I am a referee** opens a five-minute talk clock, full-screen yellow and red cards, and a verdict checklist.
 
 The rules of the game sit below the buttons on the same page.
