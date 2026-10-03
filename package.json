@@ -1,5 +1,5 @@
 {
-  "name": "dont-kill-the-messenger",
+  "name": "dont-shoot-the-messenger",
   "private": true,
   "description": "Climate storytelling game for a 45-minute workshop. Static site, no build step.",
   "type": "module",

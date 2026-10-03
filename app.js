@@ -365,8 +365,54 @@
     openPenalty("red", "", this);
   });
 
+  // ---------- Referee: score ----------
+  var scoreLog = [];
+  var tickButtons = Array.prototype.slice.call(document.querySelectorAll(".tick"));
+
+  function scoreTotal() {
+    return scoreLog.reduce(function (sum, entry) { return sum + entry.points; }, 0);
+  }
+
+  function scoreSummary() {
+    var plus = scoreLog.filter(function (e) { return e.points > 0; }).length;
+    var minus = scoreLog.length - plus;
+    return "Score: " + scoreTotal() + " (" + plus + " plus, " + minus + " minus).";
+  }
+
+  function renderScore() {
+    $("score-total").textContent = scoreTotal();
+    tickButtons.forEach(function (btn) {
+      var key = btn.dataset.key;
+      var n = scoreLog.filter(function (e) { return e.key === key; }).length;
+      btn.querySelector(".tick-count").textContent = n;
+      btn.setAttribute("aria-label", btn.querySelector(".tick-name").textContent + ", " + (btn.dataset.points > 0 ? "plus one" : "minus one") + ". Tapped " + n + " times.");
+    });
+    $("score-undo").disabled = scoreLog.length === 0;
+    updateVerdict();
+  }
+
+  tickButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      scoreLog.push({ key: btn.dataset.key, points: Number(btn.dataset.points) });
+      btn.classList.remove("bump");
+      void btn.offsetWidth;
+      btn.classList.add("bump");
+      try { if (navigator.vibrate) navigator.vibrate(15); } catch (e) { /* ignore */ }
+      renderScore();
+      $("score-status").textContent = "Total " + scoreTotal() + ".";
+    });
+  });
+
+  $("score-undo").addEventListener("click", function () {
+    scoreLog.pop();
+    renderScore();
+    $("score-status").textContent = "Last tap undone. Total " + scoreTotal() + ".";
+  });
+
   // ---------- Referee: verdict ----------
   var form = $("verdict-form");
+  var REQUIRED = ["v-why", "v-world", "v-thing", "v-motive", "v-means", "v-opportunity"];
+  var celebrated = false;
 
   function updateVerdict() {
     var answer = form.querySelector('input[name="answer"]:checked');
@@ -374,35 +420,167 @@
       .filter(function (box) { return !box.checked; })
       .map(function (box) { return box.dataset.mmo; });
     var result = $("verdict-result");
+    var score = " " + scoreSummary();
 
     if (!answer) {
-      result.textContent = "Waiting for the character's answer.";
+      result.textContent = "Waiting for the character's answer." + score;
       return;
     }
     var gap = missing.length ? " Missing: " + missing.join(", ") + "." : "";
     if (answer.value === "yes" && reds === 0) {
-      result.textContent = "The newsbearer wins the round.";
+      result.textContent = "The newsbearer wins the round." + score;
     } else if (answer.value === "yes") {
-      result.textContent = "A yes, but with a red card, so no win this time.";
+      result.textContent = "A yes, but with a red card, so no win this time." + score;
     } else if (answer.value === "maybe") {
-      result.textContent = "Close. Ask the character what would turn maybe into yes." + gap;
+      result.textContent = "Close. Ask the character what would turn maybe into yes." + gap + score;
     } else {
-      result.textContent = "Not this time. Ask the character what was missing." + gap;
+      result.textContent = "Not this time. Ask the character what was missing." + gap + score;
     }
   }
 
-  form.addEventListener("change", updateVerdict);
+  // ---------- Celebration ----------
+  var party = $("celebrate");
+  var partyTimer = null;
+  var partyFrame = null;
+  var partyTrigger = null;
+
+  function runConfetti() {
+    var canvas = $("confetti");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
+    var w = canvas.width = party.clientWidth || window.innerWidth;
+    var h = canvas.height = party.clientHeight || window.innerHeight;
+    var ink = getComputedStyle(party).color;
+    var colours = [ink, "rgba(255,255,255,0.9)", "#FFD13B"];
+    var bits = [];
+    for (var i = 0; i < 140; i++) {
+      bits.push({
+        x: Math.random() * w,
+        y: reduce ? (Math.random() < 0.5 ? Math.random() * h * 0.12 : h * 0.88 + Math.random() * h * 0.12) : -20 - Math.random() * h * 0.6,
+        r: 4 + Math.random() * 6,
+        vy: 2 + Math.random() * 3.5,
+        vx: -1.5 + Math.random() * 3,
+        spin: Math.random() * Math.PI,
+        vs: -0.15 + Math.random() * 0.3,
+        c: colours[i % colours.length]
+      });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      bits.forEach(function (b) {
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.rotate(b.spin);
+        ctx.fillStyle = b.c;
+        ctx.fillRect(-b.r, -b.r / 2, b.r * 2, b.r);
+        ctx.restore();
+      });
+    }
+    if (reduce) { draw(); return; }
+    var start = performance.now();
+    function frame(now) {
+      bits.forEach(function (b) {
+        b.y += b.vy; b.x += b.vx; b.spin += b.vs;
+        if (b.y > h + 20 && now - start < 2500) { b.y = -20; b.x = Math.random() * w; }
+      });
+      draw();
+      if (now - start < 6000) partyFrame = window.requestAnimationFrame(frame);
+    }
+    partyFrame = window.requestAnimationFrame(frame);
+  }
+
+  function closeParty() {
+    if (partyTimer) window.clearTimeout(partyTimer);
+    partyTimer = null;
+    if (partyFrame) window.cancelAnimationFrame(partyFrame);
+    partyFrame = null;
+    if (party.open) {
+      if (typeof party.close === "function") party.close(); else party.removeAttribute("open");
+    }
+  }
+
+  function celebrate(trigger) {
+    partyTrigger = trigger;
+    $("celebrate-score").textContent = scoreSummary();
+    if (typeof party.showModal === "function") party.showModal(); else party.setAttribute("open", "");
+    $("celebrate-close").focus();
+    runConfetti();
+    try { if (navigator.vibrate) navigator.vibrate([80, 60, 80, 60, 160]); } catch (e) { /* ignore */ }
+    partyTimer = window.setTimeout(closeParty, 6000);
+  }
+
+  party.addEventListener("close", function () {
+    if (partyFrame) window.cancelAnimationFrame(partyFrame);
+    if (partyTimer) window.clearTimeout(partyTimer);
+    if (partyTrigger) partyTrigger.focus();
+  });
+  $("celebrate-close").addEventListener("click", closeParty);
+  party.addEventListener("click", function (event) {
+    if (event.target !== $("celebrate-close")) closeParty();
+  });
+
+  // ---------- Pew pew: the newsbearer did not win ----------
+  var pew = $("pewpew");
+  var pewTimer = null;
+  var pewTrigger = null;
+
+  function closePew() {
+    if (pewTimer) window.clearTimeout(pewTimer);
+    pewTimer = null;
+    if (pew.open) {
+      if (typeof pew.close === "function") pew.close(); else pew.removeAttribute("open");
+    }
+  }
+
+  function pewPew(trigger, answer) {
+    pewTrigger = trigger;
+    var reason = answer === "yes" ? "A yes, but a red card cost the win." : answer === "maybe" ? "The character said maybe." : "The character said no.";
+    $("pewpew-detail").textContent = reason + " " + scoreSummary();
+    if (typeof pew.showModal === "function") pew.showModal(); else pew.setAttribute("open", "");
+    $("pewpew-close").focus();
+    try { if (navigator.vibrate) navigator.vibrate([40, 40, 40]); } catch (e) { /* ignore */ }
+    pewTimer = window.setTimeout(closePew, 6000);
+  }
+
+  pew.addEventListener("close", function () {
+    if (pewTimer) window.clearTimeout(pewTimer);
+    if (pewTrigger) pewTrigger.focus();
+  });
+  $("pewpew-close").addEventListener("click", closePew);
+  pew.addEventListener("click", function (event) {
+    if (event.target !== $("pewpew-close")) closePew();
+  });
+
+  form.addEventListener("change", function (event) {
+    updateVerdict();
+    if (event.target.name === "answer") {
+      var lost = event.target.value !== "yes" || reds > 0;
+      if (lost) { pewPew(event.target, event.target.value); return; }
+    }
+    var allTicked = REQUIRED.every(function (id) { return $(id).checked; });
+    if (allTicked && !celebrated) {
+      celebrated = true;
+      celebrate(event.target);
+    }
+    if (!allTicked) celebrated = false;
+  });
   form.addEventListener("submit", function (event) { event.preventDefault(); });
 
   $("new-round").addEventListener("click", function () {
     form.reset();
     yellows = 0;
     reds = 0;
+    scoreLog = [];
+    celebrated = false;
     resetClock();
     renderTally();
-    announce("New round. Clock reset to five minutes.");
+    renderScore();
+    announce("New round. Clock, cards and score reset.");
     $("clock-title").focus();
   });
+
+  renderScore();
 
   // Open a role straight from a link such as index.html#referee
   var fromHash = { "#newsbearer": "news", "#character": "character", "#referee": "referee" }[window.location.hash];

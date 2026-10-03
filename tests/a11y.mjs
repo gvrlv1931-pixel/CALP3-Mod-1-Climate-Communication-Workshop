@@ -78,6 +78,14 @@ async function runAxe(page, label) {
 async function checkOverflow(page, label) {
   const o = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
   if (o.sw > o.cw) failures.push(`${label}: page scrolls sideways (${o.sw}px content in ${o.cw}px viewport)`);
+  // Full-screen overlays: nothing inside may be wider than the screen
+  const wide = await page.evaluate(() => {
+    const d = document.querySelector("dialog[open]");
+    if (!d) return [];
+    const cw = document.documentElement.clientWidth;
+    return [...d.querySelectorAll("*")].filter((el) => el.getBoundingClientRect().right > cw + 0.5 && !el.matches("canvas")).map((el) => el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""));
+  });
+  if (wide.length) failures.push(`${label}: overlay content wider than the screen (${wide.slice(0, 4).join(", ")})`);
 }
 
 async function checkFocusRing(page, label, selector) {
@@ -130,6 +138,14 @@ for (const scheme of SCHEMES) {
     if (second !== "btn-news") failures.push(`${label("keyboard")}: second Tab stop is ${second}, expected btn-news`);
     await checkFocusRing(page, label("keyboard"), "#btn-news");
 
+    // Worked example and resources, opened
+    await page.click("#worked-example > summary");
+    await page.click("#resources > summary");
+    await runAxe(page, label("worked example and resources open"));
+    await checkOverflow(page, label("worked example and resources open"));
+    await page.click("#worked-example > summary");
+    await page.click("#resources > summary");
+
     // 2. Newsbearer: draw every story at least once
     await page.click("#btn-news");
     await page.waitForTimeout(350);
@@ -168,9 +184,36 @@ for (const scheme of SCHEMES) {
     await page.check("#v-why");
     await page.check("#v-motive");
     await page.check("#v-maybe");
+    await page.waitForTimeout(200);
+    if (!(await page.evaluate(() => document.getElementById("pewpew").open))) failures.push(`${label("pew pew")}: did not open for a maybe`);
+    else {
+      await runAxe(page, label("pew pew overlay"));
+      await checkOverflow(page, label("pew pew overlay"));
+      await page.click("#pewpew-close");
+    }
     await runAxe(page, label("referee kit"));
     await checkOverflow(page, label("referee kit"));
     await checkFocusRing(page, label("referee keyboard"), "#show-yellow");
+
+    // Score: two plus taps, one minus tap, one undo
+    await page.click('.tick[data-key="personal"]');
+    await page.click('.tick[data-key="question"]');
+    await page.click('.tick[data-key="jargon"]');
+    await page.click('.tick[data-key="stats"]');
+    await page.click("#score-undo");
+    const total = await page.textContent("#score-total");
+    if (total.trim() !== "1") failures.push(`${label("score")}: total is ${total}, expected 1`);
+    await runAxe(page, label("score panel"));
+
+    // Celebration fires when all six are ticked
+    for (const id of ["#v-world", "#v-thing", "#v-means", "#v-opportunity"]) await page.check(id);
+    await page.waitForTimeout(200);
+    if (!(await page.evaluate(() => document.getElementById("celebrate").open))) failures.push(`${label("celebration")}: did not open when all six were ticked`);
+    else {
+      await runAxe(page, label("celebration overlay"));
+      await checkOverflow(page, label("celebration overlay"));
+      await page.click("#celebrate-close");
+    }
 
     // 5. Penalty overlays
     await page.click("#show-yellow");

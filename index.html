@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Don't Kill the Messenger</title>
+<title>Don't Shoot the Messenger</title>
 <meta name="description" content="A 45-minute climate storytelling game for groups of three: a newsbearer, a character and a referee.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
 
 <header class="masthead wrap">
   <p class="eyebrow">Climate communication workshop</p>
-  <h1>Don't Kill the Messenger</h1>
+  <h1>Don't Shoot the Messenger</h1>
   <p class="lede">A storytelling game for groups of three. Everyone opens this page on their own phone and presses the button for their role.</p>
 </header>
 
@@ -69,6 +69,7 @@
           <li>Your world</li>
           <li>One thing</li>
         </ol>
+        <p><strong>Lead with a moment from your own life:</strong> a place, a person, a feeling. Skip openers like "I care about climate change" or "climate change is a big issue". The referee takes points off for those.</p>
         <p>This news is a prompt. Weave it in for an extra challenge, or stick to your own personal story. Leave out numbers and jargon unless the character asks.</p>
       </div>
       <div class="actions">
@@ -170,6 +171,38 @@
         </div>
       </section>
 
+      <section class="card ref-score" aria-labelledby="score-title">
+        <div class="score-head">
+          <h2 id="score-title">Score</h2>
+          <p class="score-total"><span class="visually-hidden">Total: </span><span id="score-total">0</span></p>
+        </div>
+        <p class="clock-note">Tap every time you hear one. The total adds itself up.</p>
+        <div class="score-groups">
+          <div>
+            <p class="label">Plus one</p>
+            <div class="tick-list">
+              <button type="button" class="tick tick-plus" data-points="1" data-key="personal"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Personal story or feeling</span><span class="tick-count" data-count-for="personal">0</span></button>
+              <button type="button" class="tick tick-plus" data-points="1" data-key="question"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Good open question</span><span class="tick-count" data-count-for="question">0</span></button>
+              <button type="button" class="tick tick-plus" data-points="1" data-key="listening"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Active listening: reflects a feeling or need</span><span class="tick-count" data-count-for="listening">0</span></button>
+              <button type="button" class="tick tick-plus" data-points="1" data-key="connection"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Connects to the character's world</span><span class="tick-count" data-count-for="connection">0</span></button>
+            </div>
+          </div>
+          <div>
+            <p class="label">Minus one</p>
+            <div class="tick-list">
+              <button type="button" class="tick tick-minus" data-points="-1" data-key="general"><span class="tick-sign" aria-hidden="true">&minus;1</span><span class="tick-name">Generalising, such as "I care about the climate"</span><span class="tick-count" data-count-for="general">0</span></button>
+              <button type="button" class="tick tick-minus" data-points="-1" data-key="jargon"><span class="tick-sign" aria-hidden="true">&minus;1</span><span class="tick-name">Jargon or a banned word</span><span class="tick-count" data-count-for="jargon">0</span></button>
+              <button type="button" class="tick tick-minus" data-points="-1" data-key="stats"><span class="tick-sign" aria-hidden="true">&minus;1</span><span class="tick-name">A statistic nobody asked for</span><span class="tick-count" data-count-for="stats">0</span></button>
+              <button type="button" class="tick tick-minus" data-points="-1" data-key="lecture"><span class="tick-sign" aria-hidden="true">&minus;1</span><span class="tick-name">Lecturing, "you should" or doom</span><span class="tick-count" data-count-for="lecture">0</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-quiet" id="score-undo" disabled>Undo last tap</button>
+        </div>
+        <p class="visually-hidden" id="score-status" aria-live="polite"></p>
+      </section>
+
       <section class="card ref-verdict" aria-labelledby="verdict-title">
         <h2 id="verdict-title">Verdict</h2>
         <form class="verdict-form" id="verdict-form">
@@ -211,7 +244,7 @@
       <div class="role-rules">
         <section>
           <h4>Newsbearer</h4>
-          <p>Draw a news story as your prompt. Talk to the character in a personal, relatable way, using the three steps below. You can stick to your own personal story, or take the extra challenge of weaving the news in. You win the round if the character says yes to your one thing and you get no red card.</p>
+          <p>Draw a news story as your prompt. Lead with something personal, never a generalisation like "I care about climate change". Talk to the character in a personal, relatable way, using the three steps below. You can stick to your own personal story, or take the extra challenge of weaving the news in. You win the round if the character says yes to your one thing and you get no red card.</p>
         </section>
         <section>
           <h4>Character</h4>
@@ -230,7 +263,8 @@
       <ol class="steps">
         <li>
           <h4>My why</h4>
-          <p>Open with why you care, through a moment from your own life. If you are using the news story, connect the two. A few sentences is enough.</p>
+          <p>Open with why you care, through a moment from your own life: a place, a person, a smell, a feeling. If you are using the news story, connect the two. A few sentences is enough.</p>
+          <p>Avoid general openers such as "I care about climate change", "the planet is in trouble" or "we all need to do our bit". They sound like everyone else and cost a point.</p>
           <p class="cite">Based on Simon Sinek, Start with Why</p>
         </li>
         <li>
@@ -249,6 +283,41 @@
           <p>Detectives use motive, means and opportunity to work out who could have committed a crime. Here you're planning a small act of climate action, and the character is your accomplice.</p>
         </li>
       </ol>
+
+      <details class="fold" id="worked-example">
+        <summary>See a worked example: a coffee shop owner</summary>
+        <div class="fold-body">
+          <dl class="setup">
+            <dt>Story</dt><dd>Coffee farms are getting weeks of extra harmful heat. Droughts in Brazil and Vietnam pushed coffee prices to record highs.</dd>
+            <dt>Character</dt><dd>Marco, 44, runs a coffee shop in Glasgow's West End. Scepticism 3, time 1, wallet 2, reach 3.</dd>
+          </dl>
+
+          <div class="line line-char"><p class="who">Marco</p><p>"Make it quick, I've got a queue out the door."</p></div>
+
+          <h4 class="ex-step"><span>1</span> My why</h4>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"My first love was a barista in Bologna. Every morning that summer he made me a cappuccino with a wee heart on top. I still can't smell fresh coffee without being 19 again. So when I read that the farms growing those beans are baking in the heat, it actually hurt."</p></div>
+          <p class="why-note"><strong>Why it works:</strong> it starts with a real moment and a feeling, so Marco hears a person, not a campaign. Compare "Climate change is a huge issue and I really care about the planet", which tells him nothing about you and costs a point.</p>
+
+          <h4 class="ex-step"><span>2</span> Your world</h4>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"What's it been like for you this year, with bean prices?"</p></div>
+          <div class="line line-char"><p class="who">Marco</p><p>"Brutal. My roaster's put prices up twice. I've had to charge four pound for a flat white and my regulars moan at me."</p></div>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"So you're stuck in the middle. You're fed up because you want to be fair to your regulars and still keep the doors open. Is that right?"</p></div>
+          <div class="line line-char"><p class="who">Marco</p><p>"Aye. That's exactly it."</p></div>
+          <p class="why-note"><strong>Why it works:</strong> this is Nonviolent Communication. The messenger names what happened (prices up twice), the feeling (fed up) and the need (fairness, keeping the business going), then checks. Marco feels heard before he hears any news. The referee would tap good question and active listening.</p>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"I read that the farms in Brazil and Vietnam are getting weeks more of the kind of heat that damages the coffee plants. That's a big part of why your roaster keeps putting prices up."</p></div>
+          <p class="why-note"><strong>Why it works:</strong> the news arrives as an answer to his problem, with no numbers and no jargon.</p>
+
+          <h4 class="ex-step"><span>3</span> One thing</h4>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"Would you put a wee card by the till this week, saying where your beans come from and why the price went up? Your roaster will have the farm's story already."</p></div>
+          <div class="line line-char"><p class="who">Marco</p><p>"Go on then. Might stop the moaning."</p></div>
+          <dl class="mmo">
+            <dt>Motive</dt><dd>He wants his regulars to understand the price, in his own words.</dd>
+            <dt>Means</dt><dd>One printed card and ten minutes. No cost.</dd>
+            <dt>Opportunity</dt><dd>This week, next to the till he stands at all day.</dd>
+          </dl>
+          <p class="why-note">The referee ticks all six boxes, the character says yes and the screen celebrates.</p>
+        </div>
+      </details>
     </div>
 
     <div class="rule-block">
@@ -276,6 +345,32 @@
           </ul>
         </section>
       </div>
+    </div>
+
+    <div class="rule-block">
+      <h3>Score</h3>
+      <p>The referee taps a button every time something happens, on their phone. The page adds up the total.</p>
+      <div class="card-rules">
+        <section>
+          <h4>Plus one</h4>
+          <ul>
+            <li>A personal story or feeling</li>
+            <li>A good open question</li>
+            <li>Active listening: naming back a feeling or need</li>
+            <li>Connecting to the character's world</li>
+          </ul>
+        </section>
+        <section>
+          <h4>Minus one</h4>
+          <ul>
+            <li>Generalising, such as "I care about climate change"</li>
+            <li>Jargon or a banned word</li>
+            <li>A statistic nobody asked for</li>
+            <li>Lecturing, "you should" or doom</li>
+          </ul>
+        </section>
+      </div>
+      <p>When the referee ticks My why, Your world, One thing, Motive, Means and Opportunity, the screen celebrates. If the character answers maybe or no, or says yes after a red card, the messenger gets shot with a foam dart. Pew pew. Compare scores across rounds in the debrief.</p>
     </div>
 
     <div class="rule-block">
@@ -319,6 +414,23 @@
         <li>Who in your own life is most like your character? What will you say to them now?</li>
       </ol>
     </div>
+
+    <div class="rule-block">
+      <details class="fold" id="resources">
+        <summary>More resources</summary>
+        <div class="fold-body">
+          <ul class="resource-list">
+            <li><a href="https://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action" target="_blank" rel="noopener">Simon Sinek: How great leaders inspire action<span class="visually-hidden"> (opens in a new tab)</span></a><span>The TED talk behind "start with why". The storytelling advice holds up; his brain-science explanation is disputed.</span></li>
+            <li><a href="https://www.cnvc.org/" target="_blank" rel="noopener">Marshall Rosenberg: Nonviolent Communication<span class="visually-hidden"> (opens in a new tab)</span></a><span>The Center for Nonviolent Communication. The book is Nonviolent Communication: A Language of Life.</span></li>
+            <li><a href="https://cultureforclimate.scot/guide/guide-to-talking-about-climate-change/" target="_blank" rel="noopener">Culture for Climate Scotland: Guide to talking about climate change<span class="visually-hidden"> (opens in a new tab)</span></a><span>Practical guidance on climate conversations, written for Scotland.</span></li>
+            <li><a href="https://www.glasgow.gov.uk/article/2389/Glasgow-s-Climate-Plan" target="_blank" rel="noopener">Glasgow's Climate Plan<span class="visually-hidden"> (opens in a new tab)</span></a><span>A good model of turning climate policy into things people feel: warm homes, fuel bills and children's wellbeing.</span></li>
+            <li><a href="https://www.sei.org/perspectives/making-meaning-metrics-climate-data-storytelling/" target="_blank" rel="noopener">SEI: Making meaning from metrics<span class="visually-hidden"> (opens in a new tab)</span></a><span>How to turn climate data into stories people can relate to.</span></li>
+            <li><a href="https://www.rspb.org.uk/helping-nature/what-we-do/influence-government-and-business/nature-and-climate-emergency/climate-change-key-words-explained" target="_blank" rel="noopener">RSPB: Climate change key words explained<span class="visually-hidden"> (opens in a new tab)</span></a><span>A jargon buster for the words that earn a yellow card.</span></li>
+            <li><a href="https://business.leeds.ac.uk/research-cdr/dir-record/research-blog/1903/a-quick-guide-to-climate-change-jargon-what-experts-mean-by-mitigation-carbon-neutral-and-6-other-key-terms" target="_blank" rel="noopener">University of Leeds: A quick guide to climate change jargon<span class="visually-hidden"> (opens in a new tab)</span></a><span>What experts mean by mitigation, carbon neutral and six other terms.</span></li>
+          </ul>
+        </div>
+      </details>
+    </div>
   </section>
 </main>
 
@@ -335,6 +447,48 @@
     <p class="penalty-count" id="penalty-count"></p>
     <p class="penalty-script" id="penalty-script" hidden>"It sounds like you're [feeling] because [need] matters to you. Is that right?"</p>
     <button type="button" class="penalty-close" id="penalty-close">Back to the game</button>
+  </div>
+</dialog>
+
+<dialog class="celebrate" id="celebrate" aria-labelledby="celebrate-title">
+  <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+  <div class="celebrate-inner">
+    <p class="penalty-kicker">Motive. Means. Opportunity.</p>
+    <h2 id="celebrate-title">Case closed!</h2>
+    <p class="penalty-text">The perfect crime. Your why, their world and one thing all landed, and your accomplice is in.</p>
+    <p class="penalty-count" id="celebrate-score"></p>
+    <button type="button" class="penalty-close celebrate-close" id="celebrate-close">Back to the game</button>
+  </div>
+</dialog>
+
+<dialog class="pewpew" id="pewpew" aria-labelledby="pewpew-title">
+  <div class="celebrate-inner">
+    <svg class="pigeon" viewBox="0 0 240 210" role="img" aria-labelledby="pigeon-title">
+      <title id="pigeon-title">A cartoon messenger pigeon with a foam dart stuck to its head, dizzy but still holding its letter</title>
+      <text x="8" y="40" class="pew">PEW</text>
+      <text x="22" y="78" class="pew pew-small">pew!</text>
+      <g class="dart" transform="rotate(-28 168 52)">
+        <rect x="163" y="8" width="10" height="40" rx="3"/>
+        <path d="M160 8 L168 -4 L176 8 Z"/>
+        <ellipse cx="168" cy="50" rx="11" ry="5" class="cup"/>
+      </g>
+      <g class="stars"><path d="M120 30 l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1z"/><path d="M200 34 l2 5 5 1 -4 3 1 5 -4 -2 -4 2 1 -5 -4 -3 5 -1z"/></g>
+      <ellipse cx="115" cy="140" rx="64" ry="46" class="bird"/>
+      <path d="M70 128 q30 -18 62 6 q-22 26 -62 -6z" class="wing"/>
+      <circle cx="165" cy="88" r="32" class="bird"/>
+      <path d="M194 86 l22 7 -22 8 z" class="beak"/>
+      <path d="M152 78 l10 10 m0 -10 l-10 10" class="eye"/>
+      <path d="M172 78 l10 10 m0 -10 l-10 10" class="eye"/>
+      <path d="M158 104 q9 -7 18 0" class="eye"/>
+      <rect x="128" y="146" width="44" height="30" rx="3" class="letter"/>
+      <path d="M128 149 l22 15 22 -15" class="letter-flap"/>
+      <path d="M100 184 v14 m-8 0 h16 M128 184 v14 m-8 0 h16" class="feet"/>
+    </svg>
+    <p class="penalty-kicker">Pew pew!</p>
+    <h2 id="pewpew-title">Messenger down</h2>
+    <p class="penalty-text">Only a foam dart, though. Dust yourself off, swap roles and try again next round.</p>
+    <p class="penalty-count" id="pewpew-detail"></p>
+    <button type="button" class="penalty-close pewpew-close" id="pewpew-close">Back to the game</button>
   </div>
 </dialog>
 

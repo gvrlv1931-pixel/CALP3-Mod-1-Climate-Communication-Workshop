@@ -1,4 +1,4 @@
-# Don't Kill the Messenger
+# Don't Shoot the Messenger
 
 A 45-minute climate storytelling game for groups of three, built as a single static web page for the climate communication workshop (Module 1).
 
@@ -6,9 +6,9 @@ Each player opens the page on their own phone and presses their role:
 
 - **I am a newsbearer** draws a climate news snapshot (69 stories, each linked to its source). It works as a prompt: newsbearers can weave it in for an extra challenge or stick to their own personal story.
 - **I am a character** draws one of 29 characters living across Scotland, with an opening line, scores for scepticism, time, wallet and reach, and hidden triggers and door openers.
-- **I am a referee** opens a five-minute talk clock, full-screen yellow and red cards, and a verdict checklist.
+- **I am a referee** opens a five-minute talk clock, full-screen yellow and red cards (5 seconds each, counted), a tap-to-score board that adds up the total, and a verdict checklist. Ticking all six parts of the verdict sets off a full-screen celebration.
 
-The rules of the game sit below the buttons on the same page.
+The rules of the game sit below the buttons on the same page, with a collapsible worked example and a collapsible list of further resources.
 
 ## Publish it with GitHub Pages
 
