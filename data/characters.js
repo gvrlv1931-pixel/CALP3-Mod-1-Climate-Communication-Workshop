@@ -1,12 +1,60 @@
 // Character deck. All characters are fictional, and all live in Scotland.
-// stats run from 1 to 5:
-//   scepticism = how hard they push back
-//   time       = how much spare time they have
-//   wallet     = how much money they can spend
-//   reach      = how many people listen to them
-// openingLine is public: the character says it to start the round.
-//   The more sceptical the character, the more defensive the opening.
-// triggers and doorOpeners are secret: only the character and the referee see them.
+//
+// Read out at the start of the round, so everyone knows it:
+//   name, pronouns, age, role, place, tagline, neverWithout
+//   scene = where the newsbearer meets them. Unless the scene says otherwise,
+//           the newsbearer and the character have never met.
+// openingLine: the character says it to start the conversation.
+//
+// Hidden from the newsbearer. Only the character and the referee see it:
+//   view = the character's climate view, one of the keys in CLIMATE_VIEWS
+//   stats run from 1 to 5:
+//     time   = how much spare time they have
+//     wallet = how much money they can spend
+//     reach  = how many people listen to them
+//   triggers and doorOpeners
+//
+// The six climate views run from least to most resistant. They are adapted
+// from Yale's Global Warming's Six Americas.
+window.CLIMATE_VIEWS = [
+  {
+    key: "alarmed",
+    name: "Alarmed",
+    play: "You're sure it's urgent and you're worried. You don't need convincing. You want something that actually helps.",
+    tip: "Skip the facts. Offer a real role, ideally one that uses their reach."
+  },
+  {
+    key: "concerned",
+    name: "Concerned",
+    play: "You think it's real and serious, but it feels far off. Other things come first.",
+    tip: "Bring it close to home: their street, their people, this year."
+  },
+  {
+    key: "cautious",
+    name: "Cautious",
+    play: "You haven't made up your mind. Is it happening? Is it us? Is it serious?",
+    tip: "Share what you've seen yourself and leave room for their questions."
+  },
+  {
+    key: "disengaged",
+    name: "Disengaged",
+    play: "You rarely think or hear about it. It's not part of your life.",
+    tip: "Start with what they already care about. Climate can come later, or not at all."
+  },
+  {
+    key: "doubtful",
+    name: "Doubtful",
+    play: "You think it's natural or exaggerated. You'd still say yes to something that's good for you.",
+    tip: "Don't argue the science. Find something they want anyway."
+  },
+  {
+    key: "dismissive",
+    name: "Dismissive",
+    play: "You think it's a con and you're ready to argue. You'd still say yes to something that's good for you.",
+    tip: "Don't try to win the argument. Find one value you share and a small, low-risk step."
+  }
+];
+
 window.CHARACTERS = [
   {
     name: "Dean Ross",
@@ -15,9 +63,11 @@ window.CHARACTERS = [
     role: "Personal trainer",
     place: "Falkirk",
     tagline: "Trains six days a week. On the seventh he films himself training.",
+    scene: "You've just finished a class at his gym.",
     openingLine: "Go on, mate, but I've got a client at half past. Is there protein in this?",
     neverWithout: "A litre of protein shake",
-    stats: { scepticism: 3, time: 2, wallet: 3, reach: 5 },
+    view: "disengaged",
+    stats: { time: 2, wallet: 3, reach: 5 },
     triggers: ["Anyone coming for his steak", "The phrase \"plant-based\"", "Being talked to like he's thick"],
     doorOpeners: ["Asking how his clients are getting on", "Talk of feeling strong, fit and recovered", "His gran, who brought him up"]
   },
@@ -28,9 +78,11 @@ window.CHARACTERS = [
     role: "Children's social worker and mum of three",
     place: "Dundee",
     tagline: "\"I have a spare five minutes on the commute next week, or the next free slot is in two months' time. Can you drop me a text instead?\"",
+    scene: "You work in the same building. She's rushing down the corridor.",
     openingLine: "I'm due at a case conference in ten minutes. Walk with me?",
     neverWithout: "Her work phone and her personal phone, both ringing",
-    stats: { scepticism: 2, time: 1, wallet: 2, reach: 3 },
+    view: "concerned",
+    stats: { time: 1, wallet: 2, reach: 3 },
     triggers: ["Elaborate sales pitches", "Anything that hints she's failing her kids", "\"Easy swaps\" that cost her an hour"],
     doorOpeners: ["Anything that saves her time", "Her own kids' health and future", "The children and families she works with"]
   },
@@ -41,9 +93,11 @@ window.CHARACTERS = [
     role: "Landlord of nine flats in Scotland",
     place: "Lives in Harrogate, lets flats in Edinburgh",
     tagline: "Former bank manager from Yorkshire. Gave his tenants his mobile number once and has regretted it ever since.",
+    scene: "You rent one of his flats. He's come up to check the boiler.",
     openingLine: "If this is about the new rental rules, I've already had the letter, thank you.",
     neverWithout: "A spreadsheet",
-    stats: { scepticism: 4, time: 4, wallet: 5, reach: 2 },
+    view: "doubtful",
+    stats: { time: 4, wallet: 5, reach: 2 },
     triggers: ["New regulations from Holyrood", "Being called a leech", "Anyone who hasn't done the sums"],
     doorOpeners: ["Sums that add up", "Tenants who stay longer and pay on time", "Being treated as one of the fair landlords"]
   },
@@ -54,9 +108,11 @@ window.CHARACTERS = [
     role: "Sheep farmer",
     place: "Highlands",
     tagline: "Fourth generation on the same hill. Farms with her wife, Sian, and two collies who outrank them both.",
+    scene: "You're out on a hill walk and stop at her gate.",
     openingLine: "I've got ewes to check. Say your piece, and don't tell me how to farm.",
     neverWithout: "Baler twine",
-    stats: { scepticism: 4, time: 1, wallet: 2, reach: 3 },
+    view: "cautious",
+    stats: { time: 1, wallet: 2, reach: 3 },
     triggers: ["Townies telling her how to farm", "The word \"rewilding\"", "\"Meat is the problem\""],
     doorOpeners: ["Respect for what farmers know about the land", "Her family's four generations on the hill", "Anything that protects her flock and her income"]
   },
@@ -67,9 +123,11 @@ window.CHARACTERS = [
     role: "Fintech founder",
     place: "Glasgow",
     tagline: "Part of Glasgow's growing fintech scene. Moved fast and broke things, mainly his sleep pattern.",
+    scene: "You're next to him at a networking breakfast.",
     openingLine: "I've got a call in five. Give me the pitch. What's the ROI?",
     neverWithout: "Two phones",
-    stats: { scepticism: 3, time: 1, wallet: 4, reach: 4 },
+    view: "cautious",
+    stats: { time: 1, wallet: 4, reach: 4 },
     triggers: ["Being lectured", "\"Capitalism caused this\"", "Anything that sounds slow"],
     doorOpeners: ["A chance to be early to something big", "Growth and opportunity", "His mum in Ghana, who phones every Sunday"]
   },
@@ -80,9 +138,11 @@ window.CHARACTERS = [
     role: "Retired school cook, now helps at the local soup kitchen",
     place: "Kirkcaldy",
     tagline: "Fed 300 kids a day for 31 years. Now cooks for whoever comes through the soup kitchen door.",
+    scene: "You've just finished a shift at the soup kitchen together.",
     openingLine: "Sit down, love. The weather's a wee bit nippy, isn't it? Let me get my coat.",
     neverWithout: "Fresh produce from the community garden",
-    stats: { scepticism: 2, time: 4, wallet: 2, reach: 3 },
+    view: "concerned",
+    stats: { time: 4, wallet: 2, reach: 3 },
     triggers: ["Supermarket organic labels", "People talking about long-term or far-reaching concepts", "Long words"],
     doorOpeners: ["Asking how things were done in her day", "Her community garden project", "Neighbours looking out for each other"]
   },
@@ -93,9 +153,11 @@ window.CHARACTERS = [
     role: "Sixth-year pupil",
     place: "Dundee",
     tagline: "Straight As in his Highers and a personal statement on its ninth draft.",
+    scene: "You're a volunteer at his school's careers fair.",
     openingLine: "If this is not increasing my chances of getting into Oxford, I'm not doing it.",
     neverWithout: "A colour-coded revision timetable",
-    stats: { scepticism: 3, time: 2, wallet: 1, reach: 3 },
+    view: "disengaged",
+    stats: { time: 2, wallet: 1, reach: 3 },
     triggers: ["\"When I was your age\"", "Time-wasting that does nothing for his CV", "Being called a \"model minority\""],
     doorOpeners: ["Being treated like an adult", "Anything that would strengthen his university application", "A real problem he could solve"]
   },
@@ -106,9 +168,11 @@ window.CHARACTERS = [
     role: "Taxi and delivery driver",
     place: "Dumfries",
     tagline: "\"24 hours a day is not enough. I don't even have time to sleep.\"",
+    scene: "He's just dropped a parcel at your door.",
     openingLine: "Going off for a delivery. Can this wait?",
     neverWithout: "At least two cans of Monster",
-    stats: { scepticism: 3, time: 1, wallet: 2, reach: 3 },
+    view: "disengaged",
+    stats: { time: 1, wallet: 2, reach: 3 },
     triggers: ["Fuel prices", "Being told to just buy an electric car", "Cyclists"],
     doorOpeners: ["Cutting his fuel costs", "His kids and his family in Somalia", "Respect for how hard he works"]
   },
@@ -119,9 +183,11 @@ window.CHARACTERS = [
     role: "A&E charge nurse",
     place: "Musselburgh",
     tagline: "Has seen everything at 3am on a Saturday. Nothing shocks him.",
+    scene: "You're in the hospital café queue as he comes off shift.",
     openingLine: "I've just done four nights. I'll be honest, I've got bigger problems than this.",
     neverWithout: "Four pens, none of them his",
-    stats: { scepticism: 2, time: 1, wallet: 2, reach: 3 },
+    view: "concerned",
+    stats: { time: 1, wallet: 2, reach: 3 },
     triggers: ["Being given one more thing to do", "Guilt trips", "Politicians"],
     doorOpeners: ["His patients' health", "Ideas that take no extra effort", "His family back in Brazil"]
   },
@@ -132,9 +198,11 @@ window.CHARACTERS = [
     role: "Pub landlord and Sunday league chairman",
     place: "Inverness",
     tagline: "Runs the pub, the team and the meat raffle, in that order.",
+    scene: "You're at the bar in his pub on a quiet Tuesday.",
     openingLine: "You can start talking after a pint or two.",
     neverWithout: "A bunch of keys the size of his fist",
-    stats: { scepticism: 4, time: 2, wallet: 2, reach: 4 },
+    view: "dismissive",
+    stats: { time: 2, wallet: 2, reach: 4 },
     triggers: ["Being called a dinosaur", "Energy companies", "\"It's only a game\""],
     doorOpeners: ["The club, the lads and the community", "Cutting the pub's bills", "Being seen as the man who holds the town together"]
   },
@@ -145,11 +213,13 @@ window.CHARACTERS = [
     role: "Bus driver",
     place: "Glasgow",
     tagline: "Trans man who drives the number 4 through the city centre. Knows every regular by name and every pothole by feel.",
+    scene: "You've just started at his bus depot. It's his break.",
     openingLine: "I've got twenty minutes on my break, pal, and I'm eating my piece while you talk.",
     neverWithout: "A flask and a roll on square sausage",
-    stats: { scepticism: 3, time: 2, wallet: 2, reach: 3 },
-    triggers: ["Being told to just cycle to work", "People who've never sat in Glasgow traffic", "Being talked to like he's thick"],
-    doorOpeners: ["His regular passengers, especially the older ones", "Fewer cars clogging up his route", "His gran, who brought him up"]
+    view: "cautious",
+    stats: { time: 2, wallet: 2, reach: 3 },
+    triggers: ["Being told to just cycle to work", "People who've never sat in Glasgow traffic", "Anyone sneering at folk who take the bus"],
+    doorOpeners: ["His regular passengers, especially the older ones", "Fewer cars clogging up his route", "Standing up for drivers in his union"]
   },
   {
     name: "Lorraine Docherty",
@@ -158,9 +228,11 @@ window.CHARACTERS = [
     role: "School dinner lady and mum of five",
     place: "Govan, Glasgow",
     tagline: "Five weans, two dogs, one bathroom. Her mum and her sister live on the same street.",
+    scene: "You're her new neighbour, round to borrow a ladder.",
     openingLine: "You'll need to talk while I peel. There's seven for tea and that's before the neighbours.",
     neverWithout: "A family-size bag of tatties",
-    stats: { scepticism: 2, time: 1, wallet: 1, reach: 4 },
+    view: "disengaged",
+    stats: { time: 1, wallet: 1, reach: 4 },
     triggers: ["Being told to buy something", "Anything that hints she's not doing right by her kids", "People from the west end telling her how to live"],
     doorOpeners: ["Anything that saves money on the messages", "Her kids' health and their future", "Being treated as the expert on her own family"]
   },
@@ -171,9 +243,11 @@ window.CHARACTERS = [
     role: "Offshore oil and gas technician",
     place: "Aberdeen",
     tagline: "Two weeks on the rig, three weeks at home. Paid off his mortgage at 38.",
+    scene: "You've just met at a friend's barbecue. He's heard what you do.",
     openingLine: "Let me guess. You've come to tell me my job's killing the planet.",
     neverWithout: "His offshore survival certificate",
-    stats: { scepticism: 5, time: 3, wallet: 4, reach: 2 },
+    view: "doubtful",
+    stats: { time: 3, wallet: 4, reach: 2 },
     triggers: ["\"Just retrain\"", "Being cast as the villain", "People who fly to climate protests"],
     doorOpeners: ["Respect for how skilled and dangerous his work is", "Real jobs with real pay", "His kids being able to build a life in Aberdeen"]
   },
@@ -184,11 +258,13 @@ window.CHARACTERS = [
     role: "Uber driver",
     place: "Edinburgh",
     tagline: "Knows every shortcut in the city and every roadwork that blocks it. Car on finance, three kids at home.",
-    openingLine: "Quick one, boss. I've got a pick-up at Waverley in ten minutes.",
+    scene: "You're in the back of his car on the way to Waverley.",
+    openingLine: "Waverley, aye? Traffic's murder today, boss. Could be twenty minutes.",
     neverWithout: "A power bank and a phone mount",
-    stats: { scepticism: 3, time: 1, wallet: 2, reach: 3 },
-    triggers: ["Low emission zone fines", "Being told to just buy an electric car", "Cyclists"],
-    doorOpeners: ["Cutting his fuel costs", "His kids and his family", "Respect for how long his shifts are"]
+    view: "doubtful",
+    stats: { time: 1, wallet: 2, reach: 3 },
+    triggers: ["Low emission zone fines", "Being told his car is the problem", "Folk who've never had a car on finance"],
+    doorOpeners: ["Saving money for his kids", "Being the expert on Edinburgh's roads", "Cleaner air for his daughter, who has asthma"]
   },
   {
     name: "Ailsa Ross",
@@ -197,9 +273,11 @@ window.CHARACTERS = [
     role: "Game developer",
     place: "Dundee",
     tagline: "Trans woman and level designer at an indie studio. Has shipped two games, broken three keyboards and started the studio's queer gamers' night.",
+    scene: "A friend has introduced you at a tech meetup.",
     openingLine: "Is this going to be one of those worthy apps? Because I'll know if it's badly designed.",
     neverWithout: "Over-ear headphones and a can of Irn-Bru",
-    stats: { scepticism: 2, time: 2, wallet: 3, reach: 4 },
+    view: "alarmed",
+    stats: { time: 2, wallet: 3, reach: 4 },
     triggers: ["\"Games rot your brain\"", "Being told to just log off", "Companies pretending to be green"],
     doorOpeners: ["Good design and clever systems", "Her studio and her players", "A problem worth solving"]
   },
@@ -210,11 +288,13 @@ window.CHARACTERS = [
     role: "Crofter",
     place: "Isle of Lewis",
     tagline: "Keeps sheep, cuts peat and speaks Gaelic at home. Her family has worked this croft for five generations.",
-    openingLine: "I've sheep to see to. Say your piece, and don't tell me how to work my land.",
+    scene: "You're on a walking holiday and stop at her croft to ask the way.",
+    openingLine: "I've sheep to see to. If you're another one with a plan for my croft, keep walking.",
     neverWithout: "Wellies and a flask of tea",
-    stats: { scepticism: 4, time: 1, wallet: 2, reach: 3 },
-    triggers: ["Mainlanders telling her how to manage the land", "The word \"rewilding\"", "Being told her way of life is the problem"],
-    doorOpeners: ["Respect for what crofters know about the land", "Her family's five generations on the croft", "Keeping young people on the island"]
+    view: "cautious",
+    stats: { time: 1, wallet: 2, reach: 3 },
+    triggers: ["Decisions about her land made in Edinburgh", "Being told cutting peat is wrecking the planet", "Visitors who treat the island like a postcard"],
+    doorOpeners: ["Being asked how the land has changed in her lifetime", "Keeping young people on the island", "The storms that keep cancelling the ferry"]
   },
   {
     name: "Jamie Leask",
@@ -223,9 +303,11 @@ window.CHARACTERS = [
     role: "Fisherman",
     place: "Lerwick, Shetland",
     tagline: "Skipper of his own boat, like his father. Up before four most mornings.",
+    scene: "You're on the pier as he lands his catch.",
     openingLine: "I've heard it all from folk who've never been to sea. What's it this time?",
     neverWithout: "A weather app and a thermos",
-    stats: { scepticism: 4, time: 2, wallet: 3, reach: 3 },
+    view: "cautious",
+    stats: { time: 2, wallet: 3, reach: 3 },
     triggers: ["Being blamed for empty seas", "Rules made in Edinburgh or London", "People who've never set foot on a boat"],
     doorOpeners: ["Respect for his knowledge of the sea", "His crew and their families", "Healthy fish stocks for his son's generation"]
   },
@@ -236,11 +318,13 @@ window.CHARACTERS = [
     role: "Retired mill worker",
     place: "Paisley",
     tagline: "Worked at the thread mill for 30 years. Never misses the bingo or Sunday Mass.",
+    scene: "You've sat down next to her at the bingo.",
     openingLine: "Sit down, hen. We didn't have climate change in my day, we had weather. Go on.",
     neverWithout: "A bag full of plastic bags",
-    stats: { scepticism: 3, time: 5, wallet: 1, reach: 3 },
-    triggers: ["Being talked down to", "\"Your generation caused this\"", "Long words"],
-    doorOpeners: ["Time and a cup of tea", "Her great-grandchildren", "Asking how things were done in her day"]
+    view: "doubtful",
+    stats: { time: 5, wallet: 1, reach: 3 },
+    triggers: ["Being talked down to", "\"Your generation caused this\"", "Being told off about her plastic bags"],
+    doorOpeners: ["Time and a cup of tea", "Her great-grandchildren", "Asking about her years at the mill"]
   },
   {
     name: "Graeme Elliot",
@@ -249,11 +333,13 @@ window.CHARACTERS = [
     role: "Beef and barley farmer",
     place: "Scottish Borders",
     tagline: "Runs 600 acres with his brother and his daughter. Sells his barley to a distillery up the road.",
+    scene: "You've come to his farm to buy a load of firewood.",
     openingLine: "I've a calving cow and a broken tractor. If you're here to tell me beef's the problem, you can save your breath.",
     neverWithout: "A mud-caked Land Rover",
-    stats: { scepticism: 4, time: 1, wallet: 3, reach: 3 },
-    triggers: ["\"Meat is the problem\"", "Subsidy rules from people who've never farmed", "Townies telling him how to run his land"],
-    doorOpeners: ["Respect for what farmers know about the land", "Handing a working farm on to his daughter", "Anything that protects his yields and his income"]
+    view: "doubtful",
+    stats: { time: 1, wallet: 3, reach: 3 },
+    triggers: ["Subsidy rules from people who've never farmed", "Being told cows are worse than cars", "Being blamed for floods downstream"],
+    doorOpeners: ["Being asked for his advice", "Handing a working farm on to his daughter", "The wet springs that ruined last year's barley"]
   },
   {
     name: "Pastor Beth Orr",
@@ -262,9 +348,11 @@ window.CHARACTERS = [
     role: "Church pastor",
     place: "Paisley",
     tagline: "Founder of the biggest women-only Bible study group in the Central Belt.",
+    scene: "You've come along to her church's coffee morning.",
     openingLine: "In His time, all will be well.",
     neverWithout: "Her talking points for her next Christian women's conference",
-    stats: { scepticism: 3, time: 2, wallet: 2, reach: 5 },
+    view: "cautious",
+    stats: { time: 2, wallet: 2, reach: 5 },
     triggers: ["Non-believers dismissing her faith", "Being talked down to by men as \"just a woman\"", "Being told faith and science don't mix"],
     doorOpeners: ["Women's power to create change", "Practical ways to help the poorest in her parish", "Charity work for local communities"]
   },
@@ -275,9 +363,11 @@ window.CHARACTERS = [
     role: "Café owner",
     place: "Rothesay, Isle of Bute",
     tagline: "Came from Syria in 2016. His baklava is now the most talked-about thing on the island.",
+    scene: "You've just walked off the ferry into his café.",
     openingLine: "Sit, have a coffee. But be quick, the ferry is in and the tourists are coming.",
     neverWithout: "A tray of something sweet",
-    stats: { scepticism: 2, time: 1, wallet: 2, reach: 3 },
+    view: "concerned",
+    stats: { time: 1, wallet: 2, reach: 3 },
     triggers: ["Being treated as a guest after ten years here", "Paperwork", "\"Just go vegan\""],
     doorOpeners: ["His staff and his regulars", "Ingredient prices", "His family and the island that welcomed them"]
   },
@@ -288,11 +378,13 @@ window.CHARACTERS = [
     role: "Sixth-year pupil",
     place: "Inverness",
     tagline: "Scottish-Ghanaian, born in Raigmore Hospital. Has passed his driving theory test twice, just to be sure. The last bus home is at 10pm.",
+    scene: "You're both waiting for the last bus home.",
     openingLine: "Is this going to take long?",
     neverWithout: "Second-hand car listings open on his phone",
-    stats: { scepticism: 2, time: 4, wallet: 1, reach: 4 },
-    triggers: ["\"When I was your age\"", "Anything that threatens him getting a car", "\"Your generation will fix it\""],
-    doorOpeners: ["Being treated like an adult", "Freedom and getting out of the house", "Anything his mates would rate"]
+    view: "disengaged",
+    stats: { time: 4, wallet: 1, reach: 4 },
+    triggers: ["\"Just get the bus\"", "Adults who drove everywhere telling him not to", "\"Your generation will fix it\""],
+    doorOpeners: ["Freedom and getting out of the house", "Anything his mates would rate", "Saving up for his first car"]
   },
   {
     name: "Chiara Rossi",
@@ -301,11 +393,13 @@ window.CHARACTERS = [
     role: "Community midwife",
     place: "Dundee",
     tagline: "Third-generation Italian-Scot. Has delivered more babies than she can count, several of them in cars.",
+    scene: "She's giving you a lift between home visits.",
     openingLine: "I've got three home visits before lunch. Talk while I drive?",
     neverWithout: "A birth kit in the boot",
-    stats: { scepticism: 2, time: 1, wallet: 2, reach: 3 },
-    triggers: ["Being given one more thing to do", "Guilt trips", "Politicians"],
-    doorOpeners: ["The mums and babies she looks after", "Ideas that take no extra effort", "Her nonna's cooking and family Sundays"]
+    view: "concerned",
+    stats: { time: 1, wallet: 2, reach: 3 },
+    triggers: ["Being told to do her rounds by bike", "\"Having babies is bad for the planet\"", "Guilt about her diesel car"],
+    doorOpeners: ["The mums and babies she looks after", "Cleaner air for newborns", "Her nonna's cooking and family Sundays"]
   },
   {
     name: "Alex Drummond",
@@ -314,9 +408,11 @@ window.CHARACTERS = [
     role: "Ski instructor and B&B owner",
     place: "Aviemore",
     tagline: "Teaches skiing on Cairn Gorm in winter and runs a four-room B&B the rest of the year.",
+    scene: "You're a guest at their B&B, down for breakfast.",
     openingLine: "Lovely to chat. You'll have to excuse me if I check the bookings while we talk.",
     neverWithout: "Three layers and a lip balm",
-    stats: { scepticism: 2, time: 3, wallet: 3, reach: 3 },
+    view: "alarmed",
+    stats: { time: 3, wallet: 3, reach: 3 },
     triggers: ["Being told tourism is the problem", "Townies who think the Highlands are a theme park", "Doom"],
     doorOpeners: ["The mountains and the people who love them", "Keeping their business going all year", "Local young people having jobs here"]
   },
@@ -327,9 +423,11 @@ window.CHARACTERS = [
     role: "Local councillor",
     place: "Falkirk",
     tagline: "Twenty-five years on the council. Knows every pothole by name.",
+    scene: "You've come to her weekly surgery at the library.",
     openingLine: "Let me stop you there. Who sent you, and where are my residents supposed to park?",
     neverWithout: "A clipboard",
-    stats: { scepticism: 5, time: 3, wallet: 3, reach: 4 },
+    view: "doubtful",
+    stats: { time: 3, wallet: 3, reach: 4 },
     triggers: ["Anything that removes parking", "Being told what to do by Holyrood", "\"Twenty-minute neighbourhoods\""],
     doorOpeners: ["Her residents' wellbeing", "Pride in Falkirk", "Anything that wins votes"]
   },
@@ -340,9 +438,11 @@ window.CHARACTERS = [
     role: "Accessibility consultant and wheelchair user",
     place: "Glasgow",
     tagline: "Holds a black belt in arguing with ScotRail.",
+    scene: "You're at a community meeting about a new cycle lane.",
     openingLine: "Before you start: did anyone ask a disabled person about this?",
     neverWithout: "A plan B for every journey",
-    stats: { scepticism: 3, time: 3, wallet: 3, reach: 3 },
+    view: "concerned",
+    stats: { time: 3, wallet: 3, reach: 3 },
     triggers: ["\"Just cycle\"", "Plastic straw bans (he needs bendy straws to drink)", "Green plans drawn up without asking disabled people"],
     doorOpeners: ["Asking for his expertise", "Ideas that work for everyone", "His independence"]
   },
@@ -353,9 +453,11 @@ window.CHARACTERS = [
     role: "Investment fund manager",
     place: "Edinburgh",
     tagline: "Came from Chennai to study at Edinburgh at 18 and never left. Office on Charlotte Square, holiday home in St Andrews.",
+    scene: "A friend got you a slot in her diary.",
     openingLine: "You have two minutes. Make them count.",
     neverWithout: "A golf umbrella",
-    stats: { scepticism: 3, time: 1, wallet: 5, reach: 4 },
+    view: "concerned",
+    stats: { time: 1, wallet: 5, reach: 4 },
     triggers: ["\"Eat the rich\"", "Comments about her flights", "Anyone wasting her time"],
     doorOpeners: ["Risk and return", "Her children's future", "Her Saturday round at the Old Course"]
   },
@@ -366,9 +468,11 @@ window.CHARACTERS = [
     role: "Travel content creator",
     place: "Edinburgh",
     tagline: "Has been to 64 countries and filmed a sunrise in most of them.",
+    scene: "You've shared a table with them in a busy café in Leith.",
     openingLine: "Oh, I love a chat about the planet. Hang on, this isn't about flying, is it?",
     neverWithout: "A photo opportunity",
-    stats: { scepticism: 2, time: 4, wallet: 3, reach: 5 },
+    view: "concerned",
+    stats: { time: 4, wallet: 3, reach: 5 },
     triggers: ["Flight shaming", "Being called a hypocrite", "\"Just holiday at home\""],
     doorOpeners: ["Beautiful places and the people who live there", "Their audience and a good story", "Being seen as part of the answer"]
   },
@@ -379,10 +483,117 @@ window.CHARACTERS = [
     role: "Plumber and heating engineer",
     place: "Ayr",
     tagline: "Moved from Gdańsk in 2008 and now runs her own firm. Customers still ask when the plumber is coming.",
-    openingLine: "If you're here to sell me on heat pumps, I've heard it all. Who told you, YouTube?",
+    scene: "She's come round to service your boiler.",
+    openingLine: "If you're about to ask me about heat pumps, I've heard it all. Who told you, YouTube?",
     neverWithout: "A van full of spare parts",
-    stats: { scepticism: 4, time: 2, wallet: 3, reach: 3 },
+    view: "cautious",
+    stats: { time: 2, wallet: 3, reach: 3 },
     triggers: ["Being told how to do her job", "\"Heat pumps are easy\"", "Being called \"hen\" by customers"],
     doorOpeners: ["Respect for her trade", "Steady work for her and her apprentice", "Straight talk with no sales pitch"]
+  },
+  {
+    name: "Isla Grant",
+    pronouns: "she/her",
+    age: 19,
+    role: "Environmental science student",
+    place: "Stirling",
+    tagline: "Organised her school's climate strikes at 15. Now she's not sure any of it made a difference.",
+    scene: "You're both stuck on the platform. The train's delayed again.",
+    openingLine: "Honestly? I've done the marches. Nothing changes. What's even the point?",
+    neverWithout: "A tote bag of badges she doesn't wear any more",
+    view: "alarmed",
+    stats: { time: 3, wallet: 1, reach: 4 },
+    triggers: ["\"You young people will save us\"", "Being told to cheer up", "Recycling tips"],
+    doorOpeners: ["Something that actually changes things", "Being asked to lead, not follow", "Her wee brother, who's just started high school"]
+  },
+  {
+    name: "Dr Adaeze Okafor",
+    pronouns: "she/her",
+    age: 46,
+    role: "Marine scientist",
+    place: "Oban",
+    tagline: "Came from Lagos to study seaweed and stayed for the sea. Measures warming water for a living.",
+    scene: "You're next to her on the ferry to Mull.",
+    openingLine: "If you're about to tell me the sea's getting warmer, I've got the data on my laptop.",
+    neverWithout: "A dry bag and a waterproof notebook",
+    view: "alarmed",
+    stats: { time: 2, wallet: 3, reach: 4 },
+    triggers: ["Getting the science wrong", "Being asked to explain it all again", "Hope with no plan behind it"],
+    doorOpeners: ["Her twin daughters, who love rock pools", "Fixes that already work", "Reaching people outside the lab"]
+  },
+  {
+    name: "Maggie Anderson",
+    pronouns: "she/her",
+    age: 70,
+    role: "Retired geography teacher and climate campaigner",
+    place: "Edinburgh",
+    tagline: "Taught for 35 years, then sat down in the road on Princes Street. Twice.",
+    scene: "She's stopped you on Princes Street with a clipboard.",
+    openingLine: "Have you got a minute for the planet? We're marching on Saturday.",
+    neverWithout: "A flask, a placard and a spare pair of reading glasses",
+    view: "alarmed",
+    stats: { time: 5, wallet: 3, reach: 4 },
+    triggers: ["\"Protesters just annoy people\"", "Being talked down to because of her age", "Politicians' promises"],
+    doorOpeners: ["Her grandchildren in Leith", "Her old pupils, now grown up", "A way to make a difference she hasn't tried yet"]
+  },
+  {
+    name: "Ronnie Gallacher",
+    pronouns: "he/him",
+    age: 63,
+    role: "Retired power station engineer",
+    place: "Largs",
+    tagline: "Forty years keeping the lights on at Hunterston. Now runs a local Facebook group with 4,000 members.",
+    scene: "He's your new neighbour, leaning on the garden fence.",
+    openingLine: "Climate change? The climate's always changed, pal. It's a tax grab.",
+    neverWithout: "A multimeter and strong opinions about wind turbines",
+    view: "dismissive",
+    stats: { time: 5, wallet: 3, reach: 4 },
+    triggers: ["Being called a denier", "\"The science is settled\"", "Celebrities on private jets"],
+    doorOpeners: ["Respect for his engineering know-how", "Cheaper energy made in Scotland", "His grandson, who's mad about trains"]
+  },
+  {
+    name: "Kirsty Lennox",
+    pronouns: "she/her",
+    age: 38,
+    role: "Mobile hairdresser",
+    place: "Livingston",
+    tagline: "Does cuts in kitchens across West Lothian with a podcast in one ear all day.",
+    scene: "You're in her chair, halfway through a haircut.",
+    openingLine: "If this is about 15-minute cities, they're no' locking me in my postcode.",
+    neverWithout: "Her scissors and her car keys",
+    view: "dismissive",
+    stats: { time: 2, wallet: 2, reach: 4 },
+    triggers: ["Being called a conspiracy theorist", "\"Trust the experts\"", "Anything that limits where she can drive"],
+    doorOpeners: ["Her clients and her wee business", "Natural, local, home-grown things", "Her kids' health"]
+  },
+  {
+    name: "Connor Boyle",
+    pronouns: "he/him",
+    age: 20,
+    role: "Apprentice electrician",
+    place: "Coatbridge",
+    tagline: "Third-year sparky. Spends his evenings gaming and his weekends at five-a-side.",
+    scene: "He's rewiring your kitchen and has stopped for a cup of tea.",
+    openingLine: "Is this the bit where you tell me to eat bugs?",
+    neverWithout: "An energy drink and a phone full of memes",
+    view: "dismissive",
+    stats: { time: 3, wallet: 2, reach: 4 },
+    triggers: ["Being lectured by posh folk", "\"Eat less meat\"", "Anyone coming for his car"],
+    doorOpeners: ["Earning more once he's qualified", "Being good with his hands", "His wee sister, who looks up to him"]
+  },
+  {
+    name: "Neil Mackay",
+    pronouns: "he/him",
+    age: 31,
+    role: "Wind turbine technician",
+    place: "Thurso",
+    tagline: "Climbs 80-metre towers in a Caithness gale for a living. Took the job because it paid better than the fish factory.",
+    scene: "You're next to him in the pub after his shift.",
+    openingLine: "Don't thank me for saving the planet. I'm only here for the wages.",
+    neverWithout: "A harness and a pie from the Co-op",
+    view: "disengaged",
+    stats: { time: 3, wallet: 3, reach: 2 },
+    triggers: ["Being called a climate hero", "People who've never worked at height", "\"Turbines are ugly\""],
+    doorOpeners: ["Steady local jobs for his pals", "His partner and their baby on the way", "Pride in a hard job done well"]
   }
 ];

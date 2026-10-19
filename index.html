@@ -57,20 +57,20 @@
     <article class="card news-card" id="panel-news" aria-labelledby="news-headline" hidden>
       <div class="card-top">
         <span class="chip" id="news-topic"></span>
-        <span class="meta" id="news-date"></span>
+        <span class="meta"><span id="news-date"></span> · Only you see this</span>
       </div>
       <h2 id="news-headline" tabindex="-1"></h2>
       <p class="snapshot" id="news-snapshot"></p>
       <p class="source">Source: <a id="news-link" href="#" target="_blank" rel="noopener"><span id="news-source"></span><span class="visually-hidden"> (opens in a new tab)</span></a></p>
       <div class="brief">
-        <p class="label">Your story, in three steps</p>
+        <p class="label">Your conversation</p>
         <ol class="flow">
+          <li>Connect</li>
           <li>My why</li>
-          <li>Your world</li>
           <li>One thing</li>
         </ol>
-        <p><strong>Lead with a moment from your own life:</strong> a place, a person, a feeling. Skip openers like "I care about climate change" or "climate change is a big issue". The referee takes points off for those.</p>
-        <p>This news is a prompt. Weave it in for an extra challenge, or stick to your own personal story. Leave out numbers and jargon unless the character asks.</p>
+        <p><strong>Start with them, not you.</strong> Answer their opening line and ask about their day. When they give you a link, share a moment from your own life. Skip lines like "I care about climate change": they cost a point.</p>
+        <p>The news is optional: weave it in for an extra challenge. No numbers or jargon unless they ask.</p>
       </div>
       <div class="actions">
         <button type="button" class="btn" id="news-next">Draw another story</button>
@@ -81,39 +81,28 @@
     <!-- Character -->
     <article class="card char-card" id="panel-character" aria-labelledby="char-name" hidden>
       <div class="char-head">
-        <p class="meta"><span id="char-pronouns"></span>, age <span id="char-age"></span></p>
+        <div class="card-top">
+          <span class="chip">Read this out</span>
+          <span class="meta"><span id="char-pronouns"></span>, age <span id="char-age"></span></span>
+        </div>
         <h2 id="char-name" tabindex="-1"></h2>
         <p class="char-role"><span id="char-role"></span>, <span id="char-place"></span></p>
       </div>
-      <p class="tagline" id="char-tagline"></p>
+      <p class="tagline"><span id="char-tagline"></span> <span class="never">Never without: <span id="char-never"></span>.</span></p>
+      <p class="scene"><span class="label">Scene</span> <span id="char-scene"></span></p>
       <figure class="opening">
-        <figcaption class="label">Opening line</figcaption>
+        <figcaption class="label">Your opening line</figcaption>
         <blockquote class="quote"><p id="char-opening"></p></blockquote>
       </figure>
-      <dl class="stats" id="char-stats"></dl>
-      <p class="never"><span class="label">Never without</span> <span id="char-never"></span></p>
       <div class="secret">
         <div class="secret-head">
           <button type="button" class="btn btn-quiet" id="secret-toggle" aria-expanded="false" aria-controls="secret-body">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-            <span id="secret-label">Show triggers and door openers</span>
+            <span id="secret-label">Show your hidden side</span>
           </button>
-          <p class="secret-note">For the character and the referee only. Newsbearer, look away.</p>
+          <p class="secret-note">Only you and the referee see this.</p>
         </div>
-        <div id="secret-body" hidden>
-          <div class="secret-cols">
-            <div>
-              <h3>Triggers</h3>
-              <ul id="char-triggers"></ul>
-              <p class="hint">If the newsbearer hits one, get defensive. The referee shows red.</p>
-            </div>
-            <div>
-              <h3>Door openers</h3>
-              <ul id="char-doors"></ul>
-              <p class="hint">If the newsbearer finds one, open up a little.</p>
-            </div>
-          </div>
-        </div>
+        <div id="secret-body" hidden></div>
       </div>
       <div class="actions">
         <button type="button" class="btn" id="char-next">Draw another character</button>
@@ -123,6 +112,23 @@
 
     <!-- Referee -->
     <div class="ref-grid" id="panel-referee" hidden>
+      <section class="card ref-char" aria-labelledby="refchar-title">
+        <h2 id="refchar-title" tabindex="-1">Character</h2>
+        <div class="field">
+          <label for="ref-char-input">Type or pick the character's name</label>
+          <input type="text" id="ref-char-input" list="ref-char-list" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="search" aria-describedby="ref-char-status">
+          <datalist id="ref-char-list"></datalist>
+        </div>
+        <p class="clock-note" id="ref-char-status" aria-live="polite">Ask the character who they are. Their hidden side appears here.</p>
+        <ul class="match-list" id="ref-char-matches" hidden></ul>
+        <div class="ref-char-body" id="ref-char-body" hidden>
+          <div class="ref-who">
+            <h3 id="ref-char-name" tabindex="-1"></h3>
+            <p class="meta" id="ref-char-meta"></p>
+          </div>
+        </div>
+      </section>
+
       <section class="card" aria-labelledby="clock-title">
         <h2 id="clock-title" tabindex="-1">Talk clock</h2>
         <p class="clock" id="clock" role="timer" aria-atomic="true">5:00</p>
@@ -181,10 +187,10 @@
           <div>
             <p class="label">Plus one</p>
             <div class="tick-list">
-              <button type="button" class="tick tick-plus" data-points="1" data-key="personal"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Personal story or feeling</span><span class="tick-count" data-count-for="personal">0</span></button>
               <button type="button" class="tick tick-plus" data-points="1" data-key="question"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Good open question</span><span class="tick-count" data-count-for="question">0</span></button>
               <button type="button" class="tick tick-plus" data-points="1" data-key="listening"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Active listening: reflects a feeling or need</span><span class="tick-count" data-count-for="listening">0</span></button>
-              <button type="button" class="tick tick-plus" data-points="1" data-key="connection"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Connects to the character's world</span><span class="tick-count" data-count-for="connection">0</span></button>
+              <button type="button" class="tick tick-plus" data-points="1" data-key="personal"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Personal story or feeling</span><span class="tick-count" data-count-for="personal">0</span></button>
+              <button type="button" class="tick tick-plus" data-points="1" data-key="connection"><span class="tick-sign" aria-hidden="true">+1</span><span class="tick-name">Links to what the character cares about</span><span class="tick-count" data-count-for="connection">0</span></button>
             </div>
           </div>
           <div>
@@ -208,8 +214,8 @@
         <form class="verdict-form" id="verdict-form">
           <fieldset>
             <legend>The newsbearer used</legend>
+            <label class="check"><input type="checkbox" id="v-connect"> Connect</label>
             <label class="check"><input type="checkbox" id="v-why"> My why</label>
-            <label class="check"><input type="checkbox" id="v-world"> Your world</label>
             <label class="check"><input type="checkbox" id="v-thing"> One thing</label>
           </fieldset>
           <fieldset>
@@ -244,33 +250,60 @@
       <div class="role-rules">
         <section>
           <h4>Newsbearer</h4>
-          <p>Draw a news story as your prompt. Lead with something personal, never a generalisation like "I care about climate change". Talk to the character in a personal, relatable way, using the three steps below. You can stick to your own personal story, or take the extra challenge of weaving the news in. You win the round if the character says yes to your one thing and you get no red card.</p>
+          <p>Draw a news story as your prompt. Connect with the character first, then share your why, then ask for one thing. You can stick to your own personal story, or take the extra challenge of weaving the news in. You win the round if the character says yes to your one thing and you get no red card.</p>
         </section>
         <section>
           <h4>Character</h4>
-          <p>Draw a character and read out the front of the card: name, age, job and scores. Show the triggers and door openers to the referee only. Start the round with your opening line, then stay in role: open up when the newsbearer finds a door opener and push back when they hit a trigger.</p>
+          <p>Draw a character and read out the top of the card. Keep your hidden side from the newsbearer. Start with your opening line, then stay in role: open up when the newsbearer finds a door opener and push back when they hit a trigger. You can say yes to one thing without changing your mind about climate change.</p>
         </section>
         <section>
           <h4>Referee</h4>
-          <p>Read the character's triggers and door openers. Run the five-minute clock, hold up cards when the newsbearer slips, and call the verdict at the end.</p>
+          <p>Pick the character's name in your kit to see their hidden side. Run the five-minute clock, hold up cards when the newsbearer slips, tap the score and call the verdict at the end.</p>
         </section>
       </div>
       <p>The story and the character are drawn separately, at random.</p>
     </div>
 
     <div class="rule-block">
+      <h3>Who sees what</h3>
+      <div class="table-wrap">
+        <table class="knows">
+          <thead>
+            <tr><th scope="col">What</th><th scope="col">Who sees it</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row"><strong>The news story</strong></th><td>Only the newsbearer. The others hear whatever the newsbearer chooses to share.</td></tr>
+            <tr><th scope="row"><strong>The top of the character card</strong> <span>Name, age, job, place and the scene</span></th><td>Everyone. The character reads it out.</td></tr>
+            <tr><th scope="row"><strong>The character's hidden side</strong> <span>Climate view, time, wallet, reach, triggers and door openers</span></th><td>The character and the referee. The newsbearer finds out by asking and listening.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Unless the scene says otherwise, the newsbearer and the character have never met.</p>
+      <h4 class="sub">Setting up a round</h4>
+      <ol class="plain-list">
+        <li>Everyone draws on their own phone.</li>
+        <li>The character reads out the top of their card.</li>
+        <li>The referee picks that name in the referee kit.</li>
+        <li>Two minutes to prepare. The newsbearer plans how to connect and a moment for their why.</li>
+        <li>The referee starts the clock and the character says their opening line.</li>
+      </ol>
+    </div>
+
+    <div class="rule-block">
       <h3>The conversation, in order</h3>
+      <p class="block-lede">Connect first. People listen to someone who has listened to them, and a personal story lands when it answers something they said. Out of nowhere, it sounds like a pitch.</p>
       <ol class="steps">
         <li>
-          <h4>My why</h4>
-          <p>Open with why you care, through a moment from your own life: a place, a person, a smell, a feeling. If you are using the news story, connect the two. A few sentences is enough.</p>
-          <p>Avoid general openers such as "I care about climate change", "the planet is in trouble" or "we all need to do our bit". They sound like everyone else and cost a point.</p>
-          <p class="cite">Based on Simon Sinek, Start with Why</p>
+          <h4>Connect</h4>
+          <p>Start where the character is. Answer their opening line and ask about them: their day, their work, what's on their mind. In an everyday scene like a taxi, start with what's in front of you: the traffic, the weather, the queue.</p>
+          <p>Listen for what they feel and what they need, and show them you heard it.</p>
+          <p class="cite">Based on Marshall Rosenberg, Nonviolent Communication</p>
         </li>
         <li>
-          <h4>Your world</h4>
-          <p>Ask about the character's life and listen for what they feel and what they need. Show them you heard it.</p>
-          <p class="cite">Based on Marshall Rosenberg, Nonviolent Communication</p>
+          <h4>My why</h4>
+          <p>When something they say gives you a link, share why you care through a moment from your own life: a place, a person, a smell, a feeling. If you are using the news story, bring it in here. A few sentences is enough.</p>
+          <p>Avoid generalisations such as "I care about climate change", "the planet is in trouble" or "we all need to do our bit". They sound like everyone else and cost a point.</p>
+          <p class="cite">Based on Simon Sinek, Start with Why</p>
         </li>
         <li>
           <h4>One thing</h4>
@@ -284,28 +317,37 @@
         </li>
       </ol>
 
+      <details class="fold" id="climate-views">
+        <summary>The six climate views, and what tends to work</summary>
+        <div class="fold-body">
+          <p>Every character holds one of six views on climate change, from least to most resistant. The newsbearer isn't told which, so listen for it.</p>
+          <ol class="views-list" id="views-list"></ol>
+          <p class="cite">Adapted from Yale's Global Warming's Six Americas</p>
+        </div>
+      </details>
+
       <details class="fold" id="worked-example">
         <summary>See a worked example: a coffee shop owner</summary>
         <div class="fold-body">
           <dl class="setup">
             <dt>Story</dt><dd>Coffee farms are getting weeks of extra harmful heat. Droughts in Brazil and Vietnam pushed coffee prices to record highs.</dd>
-            <dt>Character</dt><dd>Marco, 44, runs a coffee shop in Glasgow's West End. Scepticism 3, time 1, wallet 2, reach 3.</dd>
+            <dt>Character</dt><dd>Marco, 44, runs a coffee shop in Glasgow's West End.</dd>
+            <dt>Scene</dt><dd>You're at the front of the queue at his counter.</dd>
+            <dt>Hidden</dt><dd>Concerned. Time 1, wallet 2, reach 3. The messenger doesn't know any of this yet.</dd>
           </dl>
 
           <div class="line line-char"><p class="who">Marco</p><p>"Make it quick, I've got a queue out the door."</p></div>
 
-          <h4 class="ex-step"><span>1</span> My why</h4>
-          <div class="line line-msg"><p class="who">Messenger</p><p>"My first love was a barista in Bologna. Every morning that summer he made me a cappuccino with a wee heart on top. I still can't smell fresh coffee without being 19 again. So when I read that the farms growing those beans are baking in the heat, it actually hurt."</p></div>
-          <p class="why-note"><strong>Why it works:</strong> it starts with a real moment and a feeling, so Marco hears a person, not a campaign. Compare "Climate change is a huge issue and I really care about the planet", which tells him nothing about you and costs a point.</p>
-
-          <h4 class="ex-step"><span>2</span> Your world</h4>
-          <div class="line line-msg"><p class="who">Messenger</p><p>"What's it been like for you this year, with bean prices?"</p></div>
+          <h4 class="ex-step"><span>1</span> Connect</h4>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"It's mobbed in here! How's business, with bean prices the way they are?"</p></div>
           <div class="line line-char"><p class="who">Marco</p><p>"Brutal. My roaster's put prices up twice. I've had to charge four pound for a flat white and my regulars moan at me."</p></div>
           <div class="line line-msg"><p class="who">Messenger</p><p>"So you're stuck in the middle. You're fed up because you want to be fair to your regulars and still keep the doors open. Is that right?"</p></div>
           <div class="line line-char"><p class="who">Marco</p><p>"Aye. That's exactly it."</p></div>
-          <p class="why-note"><strong>Why it works:</strong> this is Nonviolent Communication. The messenger names what happened (prices up twice), the feeling (fed up) and the need (fairness, keeping the business going), then checks. Marco feels heard before he hears any news. The referee would tap good question and active listening.</p>
-          <div class="line line-msg"><p class="who">Messenger</p><p>"I read that the farms in Brazil and Vietnam are getting weeks more of the kind of heat that damages the coffee plants. That's a big part of why your roaster keeps putting prices up."</p></div>
-          <p class="why-note"><strong>Why it works:</strong> the news arrives as an answer to his problem, with no numbers and no jargon.</p>
+          <p class="why-note"><strong>Why it works:</strong> the messenger starts with what's in front of them, the queue, and asks about Marco's day. Then they name what happened (prices up twice), the feeling (fed up) and the need (fairness, keeping the business going), and check. That's Nonviolent Communication. The referee would tap good question and active listening.</p>
+
+          <h4 class="ex-step"><span>2</span> My why</h4>
+          <div class="line line-msg"><p class="who">Messenger</p><p>"Coffee's personal for me. My first love was a barista in Bologna. Every morning that summer he made me a cappuccino with a wee heart on top. So when I read that the farms in Brazil and Vietnam are getting weeks more of the heat that damages the plants, it actually hurt. It's a big part of why your roaster keeps putting prices up."</p></div>
+          <p class="why-note"><strong>Why it works:</strong> the story answers something Marco just said, so it doesn't come out of nowhere. It starts with a real moment and a feeling, and the news arrives as an answer to his problem, with no numbers and no jargon. Compare "Climate change is a huge issue and I really care about the planet", which tells him nothing about you and costs a point.</p>
 
           <h4 class="ex-step"><span>3</span> One thing</h4>
           <div class="line line-msg"><p class="who">Messenger</p><p>"Would you put a wee card by the till this week, saying where your beans come from and why the price went up? Your roaster will have the farm's story already."</p></div>
@@ -354,10 +396,10 @@
         <section>
           <h4>Plus one</h4>
           <ul>
-            <li>A personal story or feeling</li>
             <li>A good open question</li>
             <li>Active listening: naming back a feeling or need</li>
-            <li>Connecting to the character's world</li>
+            <li>A personal story or feeling</li>
+            <li>Linking to what the character cares about</li>
           </ul>
         </section>
         <section>
@@ -370,7 +412,7 @@
           </ul>
         </section>
       </div>
-      <p>When the referee ticks My why, Your world, One thing, Motive, Means and Opportunity, the screen celebrates. If the character answers maybe or no, or says yes after a red card, the messenger gets shot with a foam dart. Pew pew. Compare scores across rounds in the debrief.</p>
+      <p>When the referee ticks Connect, My why, One thing, Motive, Means and Opportunity, the screen celebrates. If the character answers maybe or no, or says yes after a red card, the messenger gets shot with a foam dart. Pew pew. Compare scores across rounds in the debrief.</p>
     </div>
 
     <div class="rule-block">
@@ -384,6 +426,7 @@
       <h3>End of the round</h3>
       <ul class="plain-list">
         <li>The character answers: would you do it? Yes, maybe or no. If it isn't a yes, they say which was missing: motive, means or opportunity.</li>
+        <li>The newsbearer guesses the character's climate view, then the character reveals their hidden side.</li>
         <li>The referee names one moment that worked and one to replay.</li>
       </ul>
     </div>
@@ -411,6 +454,7 @@
       <ol class="plain-list">
         <li>Which one thing would you actually do this week?</li>
         <li>What earned a red card, and what repaired it?</li>
+        <li>Which climate view was hardest to talk to, and what helped?</li>
         <li>Who in your own life is most like your character? What will you say to them now?</li>
       </ol>
     </div>
@@ -422,6 +466,8 @@
           <ul class="resource-list">
             <li><a href="https://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action" target="_blank" rel="noopener">Simon Sinek: How great leaders inspire action<span class="visually-hidden"> (opens in a new tab)</span></a><span>The TED talk behind "start with why". The storytelling advice holds up; his brain-science explanation is disputed.</span></li>
             <li><a href="https://www.cnvc.org/" target="_blank" rel="noopener">Marshall Rosenberg: Nonviolent Communication<span class="visually-hidden"> (opens in a new tab)</span></a><span>The Center for Nonviolent Communication. The book is Nonviolent Communication: A Language of Life.</span></li>
+            <li><a href="https://climatecommunication.yale.edu/about/projects/global-warmings-six-americas/" target="_blank" rel="noopener">Yale Program on Climate Change Communication: Global Warming's Six Americas<span class="visually-hidden"> (opens in a new tab)</span></a><span>The research behind the six climate views on the character cards, from Alarmed to Dismissive.</span></li>
+            <li><a href="https://climateoutreach.org/britain-talks-climate/" target="_blank" rel="noopener">Climate Outreach: Britain Talks Climate<span class="visually-hidden"> (opens in a new tab)</span></a><span>A UK toolkit for talking about climate with people of different values.</span></li>
             <li><a href="https://cultureforclimate.scot/guide/guide-to-talking-about-climate-change/" target="_blank" rel="noopener">Culture for Climate Scotland: Guide to talking about climate change<span class="visually-hidden"> (opens in a new tab)</span></a><span>Practical guidance on climate conversations, written for Scotland.</span></li>
             <li><a href="https://www.glasgow.gov.uk/article/2389/Glasgow-s-Climate-Plan" target="_blank" rel="noopener">Glasgow's Climate Plan<span class="visually-hidden"> (opens in a new tab)</span></a><span>A good model of turning climate policy into things people feel: warm homes, fuel bills and children's wellbeing.</span></li>
             <li><a href="https://www.sei.org/perspectives/making-meaning-metrics-climate-data-storytelling/" target="_blank" rel="noopener">SEI: Making meaning from metrics<span class="visually-hidden"> (opens in a new tab)</span></a><span>How to turn climate data into stories people can relate to.</span></li>
@@ -455,7 +501,7 @@
   <div class="celebrate-inner">
     <p class="penalty-kicker">Motive. Means. Opportunity.</p>
     <h2 id="celebrate-title">Case closed!</h2>
-    <p class="penalty-text">The perfect crime. Your why, their world and one thing all landed, and your accomplice is in.</p>
+    <p class="penalty-text">The perfect crime. You connected, shared your why and landed one thing, and your accomplice is in.</p>
     <p class="penalty-count" id="celebrate-score"></p>
     <button type="button" class="penalty-close celebrate-close" id="celebrate-close">Back to the game</button>
   </div>
@@ -491,6 +537,30 @@
     <button type="button" class="penalty-close pewpew-close" id="pewpew-close">Back to the game</button>
   </div>
 </dialog>
+
+<!-- The character's hidden side. app.js fills one copy on the character card and one in the referee kit. -->
+<template id="hidden-side">
+  <div class="hidden-side">
+    <div class="view">
+      <p class="view-head"><span class="label">Climate view</span> <strong class="view-name" data-f="view-name"></strong><span class="visually-hidden" data-f="view-pos"></span></p>
+      <div class="view-scale" data-f="view-scale" aria-hidden="true"></div>
+      <p class="view-ends" aria-hidden="true"><span data-f="view-first"></span><span data-f="view-last"></span></p>
+      <p class="view-play" data-f="view-play"></p>
+      <p class="view-tip" data-f="view-tip"></p>
+    </div>
+    <div class="secret-cols">
+      <div>
+        <div class="col-head"><h3>Triggers</h3><p class="hint">Push back.</p></div>
+        <ul data-f="triggers"></ul>
+      </div>
+      <div>
+        <div class="col-head"><h3>Door openers</h3><p class="hint">Open up a little.</p></div>
+        <ul data-f="doors"></ul>
+      </div>
+    </div>
+    <dl class="stats" data-f="stats"></dl>
+  </div>
+</template>
 
 <script src="data/news.js"></script>
 <script src="data/characters.js"></script>

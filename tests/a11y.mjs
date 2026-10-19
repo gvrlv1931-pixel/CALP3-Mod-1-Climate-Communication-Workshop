@@ -138,13 +138,34 @@ for (const scheme of SCHEMES) {
     if (second !== "btn-news") failures.push(`${label("keyboard")}: second Tab stop is ${second}, expected btn-news`);
     await checkFocusRing(page, label("keyboard"), "#btn-news");
 
-    // Worked example and resources, opened
-    await page.click("#worked-example > summary");
-    await page.click("#resources > summary");
-    await runAxe(page, label("worked example and resources open"));
-    await checkOverflow(page, label("worked example and resources open"));
-    await page.click("#worked-example > summary");
-    await page.click("#resources > summary");
+    // Character deck: every card is complete and uses a known climate view
+    if (scheme === SCHEMES[0] && vp === VIEWPORTS[0]) {
+      const problems = await page.evaluate(() => {
+        const views = window.CLIMATE_VIEWS.map((v) => v.key);
+        const out = [];
+        const names = new Set();
+        for (const c of window.CHARACTERS) {
+          if (names.has(c.name)) out.push(`${c.name}: duplicate name`);
+          names.add(c.name);
+          for (const f of ["name", "pronouns", "role", "place", "tagline", "scene", "openingLine", "neverWithout"]) if (!String(c[f] || "").trim()) out.push(`${c.name}: no ${f}`);
+          if (!views.includes(c.view)) out.push(`${c.name}: unknown climate view "${c.view}"`);
+          for (const s of ["time", "wallet", "reach"]) if (!(c.stats[s] >= 1 && c.stats[s] <= 5)) out.push(`${c.name}: ${s} is ${c.stats[s]}`);
+          if (c.triggers.length !== 3 || c.doorOpeners.length !== 3) out.push(`${c.name}: needs three triggers and three door openers`);
+        }
+        for (const v of views) if (!window.CHARACTERS.some((c) => c.view === v)) out.push(`no character is ${v}`);
+        return out;
+      });
+      for (const p of problems) failures.push(`[data] ${p}`);
+    }
+
+    // Worked example, climate views and resources, opened
+    const folds = ["#climate-views", "#worked-example", "#resources"];
+    for (const f of folds) await page.click(`${f} > summary`);
+    const viewItems = await page.evaluate(() => document.querySelectorAll("#views-list li").length);
+    if (viewItems !== 6) failures.push(`${label("climate views")}: listed ${viewItems} views, expected 6`);
+    await runAxe(page, label("folds open"));
+    await checkOverflow(page, label("folds open"));
+    for (const f of folds) await page.click(`${f} > summary`);
 
     // 2. Newsbearer: draw every story at least once
     await page.click("#btn-news");
@@ -173,14 +194,60 @@ for (const scheme of SCHEMES) {
       const open = await page.getAttribute("#secret-toggle", "aria-expanded");
       if (open !== "true") await page.click("#secret-toggle");
       await checkOverflow(page, label(`character draw ${i + 1}`));
-      seen.add(await page.textContent("#char-name"));
+      const card = await page.evaluate(() => ({
+        name: document.getElementById("char-name").textContent,
+        scene: document.getElementById("char-scene").textContent.trim(),
+        view: document.querySelector('#secret-body [data-f="view-name"]').textContent.trim(),
+        secret: document.querySelector(".secret").getBoundingClientRect().height,
+        vh: window.innerHeight
+      }));
+      seen.add(card.name);
+      if (!card.scene || !card.view) failures.push(`${label(`character draw ${i + 1}`)}: ${card.name} is missing a scene or climate view`);
+      // The character must see how to react without scrolling: the hidden side fits on one screen
+      if (card.vh >= 800 && card.secret > card.vh) failures.push(`${label(`character draw ${i + 1}`)}: ${card.name}'s hidden side is ${Math.round(card.secret)}px tall, taller than the ${card.vh}px screen`);
       await page.click("#char-next");
     }
     if (seen.size !== charCount) failures.push(`${label("character")}: drew ${seen.size} different characters in ${charCount} draws, expected all of them`);
 
-    // 4. Referee kit, verdict filled in
+    // 4. Referee kit: look up the character by typing or picking
     await page.click("#btn-referee");
     await page.waitForTimeout(350);
+    const refFocus = await page.evaluate(() => document.activeElement.id);
+    if (refFocus !== "refchar-title") failures.push(`${label("referee")}: focus went to ${refFocus}, expected the character heading`);
+    await checkFocusRing(page, label("referee keyboard"), "#ref-char-input");
+    await page.fill("#ref-char-input", "abdi");
+    const found = await page.evaluate(() => ({ hidden: document.getElementById("ref-char-body").hidden, name: document.getElementById("ref-char-name").textContent }));
+    if (found.hidden || found.name !== "Abdi Hassan") failures.push(`${label("referee lookup")}: typing "abdi" showed ${found.hidden ? "nothing" : found.name}`);
+    await runAxe(page, label("referee kit, character shown"));
+    await checkOverflow(page, label("referee kit, character shown"));
+    await page.fill("#ref-char-input", "ross");
+    const matchCount = await page.evaluate(() => document.querySelectorAll("#ref-char-matches .match").length);
+    if (matchCount < 2) failures.push(`${label("referee lookup")}: typing "ross" offered ${matchCount} matches, expected several`);
+    await runAxe(page, label("referee kit, several matches"));
+    const picked = await page.textContent("#ref-char-matches .match .match-name");
+    await page.click("#ref-char-matches .match");
+    const afterPick = await page.evaluate(() => ({ name: document.getElementById("ref-char-name").textContent, focus: document.activeElement.id, value: document.getElementById("ref-char-input").value }));
+    if (afterPick.name !== picked || afterPick.value !== picked) failures.push(`${label("referee lookup")}: picking ${picked} showed ${afterPick.name}`);
+    if (afterPick.focus !== "ref-char-name") failures.push(`${label("referee lookup")}: focus went to ${afterPick.focus} after picking, expected the character's name`);
+    await page.fill("#ref-char-input", "zzzz");
+    const none = await page.textContent("#ref-char-status");
+    if (!none.includes("No character")) failures.push(`${label("referee lookup")}: an unknown name gave "${none}"`);
+    const unreachable = await page.evaluate(() => {
+      const input = document.getElementById("ref-char-input");
+      const missed = [];
+      for (const c of window.CHARACTERS) {
+        input.value = c.name;
+        input.dispatchEvent(new Event("input"));
+        if (document.getElementById("ref-char-body").hidden || document.getElementById("ref-char-name").textContent !== c.name) missed.push(c.name);
+      }
+      return missed;
+    });
+    if (unreachable.length) failures.push(`${label("referee lookup")}: full names that did not show their character: ${unreachable.join(", ")}`);
+    const listed = await page.evaluate(() => document.querySelectorAll("#ref-char-list option").length);
+    if (listed !== charCount) failures.push(`${label("referee lookup")}: dropdown lists ${listed} names, expected ${charCount}`);
+
+    // Verdict filled in
+    await page.fill("#ref-char-input", "big steve");
     await page.check("#v-why");
     await page.check("#v-motive");
     await page.check("#v-maybe");
@@ -206,7 +273,7 @@ for (const scheme of SCHEMES) {
     await runAxe(page, label("score panel"));
 
     // Celebration fires when all six are ticked
-    for (const id of ["#v-world", "#v-thing", "#v-means", "#v-opportunity"]) await page.check(id);
+    for (const id of ["#v-connect", "#v-thing", "#v-means", "#v-opportunity"]) await page.check(id);
     await page.waitForTimeout(200);
     if (!(await page.evaluate(() => document.getElementById("celebrate").open))) failures.push(`${label("celebration")}: did not open when all six were ticked`);
     else {
@@ -237,6 +304,26 @@ for (const scheme of SCHEMES) {
 
     if (errors.length) failures.push(`${label("console")}: ${errors.join(" | ")}`);
     await context.close();
+  }
+}
+
+// Random draws must not depend on Math.random alone. Some page viewers make it
+// repeat, which once gave every phone in the room the same first character.
+{
+  const firsts = { character: new Set(), news: new Set() };
+  for (let i = 0; i < 10; i++) {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await context.addInitScript(() => { Math.random = () => 0.5; });
+    const page = await context.newPage();
+    await page.goto(base);
+    await page.click("#btn-character");
+    firsts.character.add(await page.textContent("#char-name"));
+    await page.click("#btn-news");
+    firsts.news.add(await page.textContent("#news-headline"));
+    await context.close();
+  }
+  for (const [deck, names] of Object.entries(firsts)) {
+    if (names.size < 3) failures.push(`[random] with Math.random stuck, 10 fresh phones drew only ${names.size} different first ${deck} card(s)`);
   }
 }
 
