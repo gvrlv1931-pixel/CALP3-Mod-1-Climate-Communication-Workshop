@@ -59,7 +59,7 @@ const VIEWPORTS = [
   { name: "narrow", width: 320, height: 640 }
 ];
 const SCHEMES = ["light", "dark"];
-const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
+const TAGS = ["wcag2a", "wcag2aa", "wcag2aaa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
 
 const failures = [];
 let axeRuns = 0;
@@ -86,6 +86,37 @@ async function checkOverflow(page, label) {
     return [...d.querySelectorAll("*")].filter((el) => el.getBoundingClientRect().right > cw + 0.5 && !el.matches("canvas")).map((el) => el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""));
   });
   if (wide.length) failures.push(`${label}: overlay content wider than the screen (${wide.slice(0, 4).join(", ")})`);
+  // Overlay titles never break inside a word (a lone R once wrapped from MESSENGER on laptops),
+  // and the whole screen fits in the window, close button included
+  const overlay = await page.evaluate(() => {
+    const d = document.querySelector("dialog[open]");
+    if (!d) return null;
+    const h = d.querySelector("h2");
+    const text = h.textContent;
+    const node = h.firstChild;
+    const split = [];
+    let pos = 0;
+    for (const word of text.split(" ")) {
+      const start = text.indexOf(word, pos);
+      pos = start + word.length;
+      const r = document.createRange();
+      const tops = new Set();
+      for (let i = start; i < start + word.length; i++) { r.setStart(node, i); r.setEnd(node, i + 1); tops.add(Math.round(r.getBoundingClientRect().top)); }
+      if (tops.size > 1) split.push(word);
+    }
+    const button = d.querySelector("button").getBoundingClientRect();
+    return { split, buttonBottom: button.bottom, vh: window.innerHeight };
+  });
+  if (overlay && overlay.split.length) failures.push(`${label}: overlay title splits ${overlay.split.join(", ")} across lines`);
+  if (overlay && overlay.buttonBottom > overlay.vh + 0.5) failures.push(`${label}: overlay is taller than the screen (button ends at ${Math.round(overlay.buttonBottom)}px of ${overlay.vh}px)`);
+}
+
+// An end-of-round scene is playing if its SVG animations have started
+async function scenePlays(page, id) {
+  return page.evaluate((id) => {
+    const anims = [...document.getElementById(id).querySelectorAll("animate, animateTransform, animateMotion")];
+    return anims.length > 0 && anims.every((a) => { try { a.getStartTime(); return true; } catch { return false; } });
+  }, id);
 }
 
 async function checkFocusRing(page, label, selector) {
@@ -254,6 +285,7 @@ for (const scheme of SCHEMES) {
     await page.waitForTimeout(200);
     if (!(await page.evaluate(() => document.getElementById("pewpew").open))) failures.push(`${label("pew pew")}: did not open for a maybe`);
     else {
+      if (!(await scenePlays(page, "pewpew"))) failures.push(`${label("pew pew")}: the dart scene did not play`);
       await runAxe(page, label("pew pew overlay"));
       await checkOverflow(page, label("pew pew overlay"));
       await page.click("#pewpew-close");
@@ -272,13 +304,19 @@ for (const scheme of SCHEMES) {
     if (total.trim() !== "1") failures.push(`${label("score")}: total is ${total}, expected 1`);
     await runAxe(page, label("score panel"));
 
-    // Celebration fires when all six are ticked
+    // Ticking boxes alone ends nothing; the character's yes, with no red card, wins
     for (const id of ["#v-connect", "#v-thing", "#v-means", "#v-opportunity"]) await page.check(id);
     await page.waitForTimeout(200);
-    if (!(await page.evaluate(() => document.getElementById("celebrate").open))) failures.push(`${label("celebration")}: did not open when all six were ticked`);
+    if (await page.evaluate(() => document.querySelector("dialog[open]") !== null)) failures.push(`${label("verdict")}: an end screen opened before the character answered`);
+    await page.check("#v-yes");
+    await page.waitForTimeout(200);
+    if (!(await page.evaluate(() => document.getElementById("celebrate").open))) failures.push(`${label("victory")}: did not open when the character said yes`);
     else {
-      await runAxe(page, label("celebration overlay"));
-      await checkOverflow(page, label("celebration overlay"));
+      if (!(await scenePlays(page, "celebrate"))) failures.push(`${label("victory")}: the pigeon scene did not play`);
+      const perfect = await page.textContent("#celebrate-text");
+      if (!perfect.includes("Every box ticked")) failures.push(`${label("victory")}: all six ticked but the screen does not say so (${perfect})`);
+      await runAxe(page, label("victory overlay"));
+      await checkOverflow(page, label("victory overlay"));
       await page.click("#celebrate-close");
     }
 
@@ -295,8 +333,18 @@ for (const scheme of SCHEMES) {
     await runAxe(page, label("red card overlay"));
     const counted = await page.textContent("#penalty-count");
     if (!counted.includes("Reds this round: 1")) failures.push(`${label("red overlay")}: card not counted (${counted})`);
+    await checkOverflow(page, label("red card overlay"));
     await page.waitForTimeout(5600);
     if (await page.evaluate(() => document.getElementById("penalty").open)) failures.push(`${label("red overlay")}: did not close by itself after 5 seconds`);
+
+    // A yes after a red card does not win
+    await page.check("#v-no");
+    await page.click("#pewpew-close");
+    await page.check("#v-yes");
+    await page.waitForTimeout(200);
+    const afterRed = await page.evaluate(() => ({ won: document.getElementById("celebrate").open, down: document.getElementById("pewpew").open, why: document.getElementById("pewpew-detail").textContent }));
+    if (afterRed.won || !afterRed.down || !afterRed.why.includes("red card")) failures.push(`${label("yes after red")}: expected Messenger down for a red card (${afterRed.why})`);
+    await page.click("#pewpew-close");
 
     // 6. WCAG 1.4.12 text spacing: the page must not break with wider spacing
     await page.addStyleTag({ content: "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }" });

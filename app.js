@@ -344,7 +344,7 @@
       showRefCharacter(found[0]);
       status.textContent = "Showing " + found[0].name + ".";
     } else if (!found.length) {
-      status.textContent = "No character called “" + typed + "”. Check the spelling, or ask to see their card.";
+      status.textContent = "No character called \"" + typed + "\". Check the spelling, or ask to see their card.";
     } else if (found.length > MAX_MATCHES) {
       status.textContent = found.length + " characters match. Keep typing.";
     } else {
@@ -366,7 +366,7 @@
     var name = document.createElement("strong");
     name.textContent = v.name;
     var play = document.createElement("span");
-    play.textContent = "“" + v.play + "”";
+    play.textContent = "\"" + v.play + "\"";
     var tip = document.createElement("span");
     tip.className = "view-tip";
     tip.textContent = "What tends to work: " + v.tip;
@@ -592,7 +592,6 @@
   // ---------- Referee: verdict ----------
   var form = $("verdict-form");
   var REQUIRED = ["v-connect", "v-why", "v-thing", "v-motive", "v-means", "v-opportunity"];
-  var celebrated = false;
 
   function updateVerdict() {
     var answer = form.querySelector('input[name="answer"]:checked');
@@ -680,11 +679,27 @@
     }
   }
 
+  // Play an end-of-round scene: its SVG animations wait until the screen opens.
+  // With reduced motion they never start, and the scene rests in its final pose.
+  function playScene(dialog) {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    Array.prototype.forEach.call(dialog.querySelectorAll("animate, animateTransform, animateMotion"), function (a) {
+      try { a.beginElement(); } catch (e) { /* no SMIL: the static scene still shows */ }
+    });
+  }
+
+  // The character said yes and there was no red card
   function celebrate(trigger) {
     partyTrigger = trigger;
+    var perfect = REQUIRED.every(function (id) { return $(id).checked; });
+    $("celebrate-text").textContent = perfect
+      ? "Every box ticked, too. One small act of climate action, coming up."
+      : "One small act of climate action, coming up.";
     $("celebrate-score").textContent = scoreSummary();
     if (typeof party.showModal === "function") party.showModal(); else party.setAttribute("open", "");
     $("celebrate-close").focus();
+    playScene(party);
     runConfetti();
     try { if (navigator.vibrate) navigator.vibrate([80, 60, 80, 60, 160]); } catch (e) { /* ignore */ }
     partyTimer = window.setTimeout(closeParty, 6000);
@@ -719,6 +734,7 @@
     $("pewpew-detail").textContent = reason + " " + scoreSummary();
     if (typeof pew.showModal === "function") pew.showModal(); else pew.setAttribute("open", "");
     $("pewpew-close").focus();
+    playScene(pew);
     try { if (navigator.vibrate) navigator.vibrate([40, 40, 40]); } catch (e) { /* ignore */ }
     pewTimer = window.setTimeout(closePew, 6000);
   }
@@ -732,18 +748,12 @@
     if (event.target !== $("pewpew-close")) closePew();
   });
 
+  // The character's answer ends the round: a yes with no red card wins
   form.addEventListener("change", function (event) {
     updateVerdict();
-    if (event.target.name === "answer") {
-      var lost = event.target.value !== "yes" || reds > 0;
-      if (lost) { pewPew(event.target, event.target.value); return; }
-    }
-    var allTicked = REQUIRED.every(function (id) { return $(id).checked; });
-    if (allTicked && !celebrated) {
-      celebrated = true;
-      celebrate(event.target);
-    }
-    if (!allTicked) celebrated = false;
+    if (event.target.name !== "answer") return;
+    if (event.target.value === "yes" && reds === 0) celebrate(event.target);
+    else pewPew(event.target, event.target.value);
   });
   form.addEventListener("submit", function (event) { event.preventDefault(); });
 
@@ -752,7 +762,6 @@
     yellows = 0;
     reds = 0;
     scoreLog = [];
-    celebrated = false;
     resetClock();
     resetRefCharacter();
     renderTally();

@@ -13,8 +13,8 @@ window.NEWS = [
   {
     topic: "Weather",
     date: "Jun 2026",
-    headline: "38°C in June, a new UK record",
-    snapshot: "On 26 June 2026 a weather station at Lingwood in Norfolk reached 38°C, the hottest June day the UK has recorded. The old record of 35.6°C had stood since 1976. The June record fell three days in a row.",
+    headline: "37.7°C in June, a new UK record",
+    snapshot: "On 26 June 2026 a weather station at Lingwood in Norfolk reached 37.7°C, the hottest June day the UK has recorded. The old record of 35.6°C had stood since 1976. The June record fell three days in a row.",
     source: "Met Office",
     url: "https://www.metoffice.gov.uk/blog/2026/june-2026-heatwave-a-recap-of-the-temperature-records"
   },
@@ -22,7 +22,7 @@ window.NEWS = [
     topic: "Weather",
     date: "May 2026",
     headline: "35°C in May at Kew Gardens",
-    snapshot: "Kew Gardens in London hit 35.1°C on 26 May 2026. The previous May record, 32.8°C, was set in 1922. Wales also broke its May record in the same heatwave.",
+    snapshot: "Kew Gardens in London hit 35.1°C on 26 May 2026. The previous May record, 32.8°C, was set in 1922 and equalled in 1944. Wales also broke its May record in the same heatwave.",
     source: "Met Office",
     url: "https://www.metoffice.gov.uk/blog/2026/may-2026-temperature-records-verified"
   },
@@ -31,8 +31,8 @@ window.NEWS = [
     date: "Jul 2026",
     headline: "Spring and summer heatwaves killed about 2,700 people in England and Wales",
     snapshot: "Researchers from LSHTM, Imperial College London and the Met Office estimate that more than 2,700 people died from heat during the May and June 2026 heatwaves. Climate change added 3 to 4°C to the hottest days. They put about 42% of the deaths down to climate change.",
-    source: "Met Office",
-    url: "https://www.metoffice.gov.uk/about-us/news-and-media/media-centre/weather-and-climate-news/2026/more-than-2700-excess-deaths-estimated-in-england-and-wales-during-may-and-june-heatwaves"
+    source: "LSHTM",
+    url: "https://www.lshtm.ac.uk/newsevents/news/2026/more-2700-excess-deaths-estimated-england-and-wales-during-may-and-june"
   },
   {
     topic: "World",
@@ -46,7 +46,7 @@ window.NEWS = [
     topic: "Money",
     date: "Aug 2026",
     headline: "Energy price cap goes up 4% in October",
-    snapshot: "From 1 October 2026 a typical household on the price cap pays £1,723 a year, £60 more than before. Gas went up most. The rise would have been about £45 bigger without a temporary cut to VAT on household electricity.",
+    snapshot: "From 1 October 2026 a typical household on the price cap pays £1,723 a year, £60 more than before. Ofgem blamed pressure on oil and gas supplies from the war in the Middle East. The rise would have been about £45 bigger without a temporary cut to VAT on household electricity.",
     source: "Ofgem",
     url: "https://www.ofgem.gov.uk/press-release/energy-price-cap-will-rise-4-october-2026"
   },
@@ -62,14 +62,14 @@ window.NEWS = [
     topic: "Home",
     date: "Sep 2026",
     headline: "Gas shock pushes Europe towards heat pumps",
-    snapshot: "European households bought 1.16 million heat pumps in the first half of 2026, 11% more than a year earlier, after gas prices jumped. Several governments cut taxes on electricity to make running them cheaper. The industry body calls gas a costly habit Europe is starting to kick.",
+    snapshot: "European households bought 1.16 million heat pumps in the first half of 2026, 11% more than a year earlier, after gas prices jumped. The European Commission urged governments to cut taxes on electricity to make running them cheaper. The industry body calls gas a costly habit Europe is starting to kick.",
     source: "Euronews",
     url: "https://www.euronews.com/2026/09/30/europe-is-ending-its-addiction-to-a-toxic-costly-drug-heat-pump-sales-soar-as-electricity-"
   },
   {
     topic: "Home",
     date: "Aug 2026",
-    headline: "Plug-in solar panels are now legal in the UK",
+    headline: "Plug-in solar panels are now legal in Britain",
     snapshot: "Since 27 August 2026 you can buy a solar panel that plugs into an ordinary socket and fit it yourself, up to 800 watts. The government says it could save a household up to £110 a year. Renters should check with their landlord first.",
     source: "GOV.UK",
     url: "https://www.gov.uk/government/news/households-can-save-as-plug-in-solar-panels-come-to-market"
@@ -86,7 +86,7 @@ window.NEWS = [
     topic: "Energy",
     date: "Apr 2026",
     headline: "Britain's grid ran on 98.8% zero-carbon power",
-    snapshot: "For half an hour on 22 April 2026, 98.8% of Great Britain's electricity came from wind, solar, nuclear and other sources that don't burn fossil fuels. That beat the previous record of 97.7%. The grid operator wants to run the whole system without fossil fuels for short periods this year.",
+    snapshot: "For half an hour on 22 April 2026, 98.8% of Great Britain's electricity came from wind, solar, nuclear and other sources that don't burn fossil fuels. That beat the previous record of 97.7%. The grid operator wants to be able to run the whole system without fossil fuels for short periods.",
     source: "NESO",
     url: "https://www.neso.energy/britains-electricity-system-breaks-zero-carbon-record-gas-reaches-historic-low-and-solar-hits-historic-high"
   },
@@ -94,13 +94,13 @@ window.NEWS = [
     topic: "Travel",
     date: "2026",
     headline: "One in four new cars sold worldwide is electric",
-    snapshot: "More than 20 million electric cars were sold in 2025, a quarter of all new cars. In Europe the share was 28%. The International Energy Agency expects electric cars to make up 28% of sales worldwide in 2026.",
+    snapshot: "More than 20 million electric cars were sold in 2025, a quarter of all new cars. In Europe the share was 28%. The International Energy Agency expects electric cars to make up close to 30% of sales worldwide in 2026.",
     source: "International Energy Agency",
     url: "https://www.iea.org/reports/global-ev-outlook-2026/executive-summary"
   },
   {
     topic: "World",
-    date: "2025",
+    date: "Feb 2026",
     headline: "China's carbon emissions have stopped rising",
     snapshot: "Carbon Brief analysis finds China's CO2 emissions have been flat or falling since March 2024, as record solar growth pushed coal power down. China emits more CO2 than any other country, so a lasting fall would change the global picture.",
     source: "Carbon Brief",
@@ -126,7 +126,7 @@ window.NEWS = [
     topic: "World",
     date: "Mar 2026",
     headline: "The planet is trapping heat faster than ever",
-    snapshot: "The WMO's yearly climate report says the gap between the heat Earth takes in and the heat it gives off hit a record in 2025. More than 90% of that extra heat ends up in the ocean. Sea levels are now about 11 cm higher than in 1993.",
+    snapshot: "The WMO's yearly climate report says the gap between the heat Earth takes in and the heat it gives off hit a record in 2025. More than 90% of that extra heat ends up in the ocean. Sea level is rising faster than when satellite measurements began.",
     source: "World Meteorological Organization",
     url: "https://wmo.int/publication-series/state-of-global-climate/state-of-global-climate-2025"
   },
@@ -150,9 +150,9 @@ window.NEWS = [
     topic: "Travel",
     date: "Sep 2026",
     headline: "No summer skiing anywhere in the Alps",
-    snapshot: "Heatwaves in summer 2026 stopped glaciers refreezing at night. By mid-August every summer ski area in the Alps had shut, a first. Zermatt, which aims to open 365 days a year, closed its glacier runs in early August.",
-    source: "CNN",
-    url: "https://www.cnn.com/2026/09/11/travel/europe-summer-ski-season-heat-waves"
+    snapshot: "Heatwaves in summer 2026 stopped glaciers refreezing at night. By mid-August every summer ski area in the Alps had shut, for the first time since summer skiing began. Zermatt, which aims to open 365 days a year, closed its glacier runs in early August.",
+    source: "PlanetSKI",
+    url: "https://planetski.eu/2026/08/15/summer-glacier-skiing-ends-in-the-alps/"
   },
   {
     topic: "Sport",
@@ -160,7 +160,7 @@ window.NEWS = [
     headline: "World Cup knockout games hit by a heat dome",
     snapshot: "A heatwave settled over the eastern United States just as the 2026 World Cup reached the knockout rounds. Philadelphia, which hosted a knockout game, had highs of around 38°C forecast. Climate scientists had warned before the tournament that heat was a risk for players and fans.",
     source: "NPR",
-    url: "https://www.npr.org/2026/07/01/nx-s1-5875173/world-cup-heat-wave-dome-philadelphia-new-york-new-jersey"
+    url: "https://www.npr.org/2026/07/01/nx-s1-5875173/world-cup-heat-wave-dome-philadelphia"
   },
   {
     topic: "Nature",
@@ -198,9 +198,9 @@ window.NEWS = [
     topic: "Health",
     date: "Oct 2025",
     headline: "Heat kills about one person a minute worldwide",
-    snapshot: "The 2025 Lancet Countdown report estimates 546,000 heat-related deaths a year, 23% more than in the 1990s. Babies under one now live through nearly four times as many heatwave days as they did then.",
+    snapshot: "The 2025 Lancet Countdown report estimates 546,000 heat-related deaths a year. The death rate from heat is up 23% since the 1990s. Babies and people over 65 now live through about four times as many heatwave days as they did 20 years ago.",
     source: "Lancet Countdown",
-    url: "https://lancetcountdown.org/2025-report/"
+    url: "https://doi.org/10.1016/S0140-6736(25)01919-1"
   },
   {
     topic: "World",
@@ -240,15 +240,15 @@ window.NEWS = [
     headline: "Most oil and gas workers already have skills offshore wind needs",
     snapshot: "Research for Offshore Energies UK found 90% of oil and gas workers have skills that transfer to offshore renewables, such as maintenance and high-voltage work. An Energy Skills Passport launched in 2025 so workers can see which of their certificates count.",
     source: "RenewableUK",
-    url: "https://www.renewableuk.com/news-and-resources/press-releases/skills-passport-enabling-people-to-find-new-jobs-in-offshore-wind-goes-live-in-2025/"
+    url: "https://www.renewableuk.com/news-and-resources/press-releases/energy-skills-passport-goes-live-enabling-workers-to-build-new-careers-across-the-energy-mix/"
   },
   {
     topic: "Nature",
     date: "May 2025",
     headline: "A glacier collapse buried the Swiss village of Blatten",
-    snapshot: "On 28 May 2025 the Birch glacier collapsed and buried most of Blatten under ice, rock and mud. Scientists watching the mountain had warned in time for the 300 villagers to be evacuated. A study links the disaster to exceptional warming in the Alps.",
-    source: "Communications Earth & Environment",
-    url: "https://www.nature.com/articles/s43247-025-02994-8"
+    snapshot: "On 28 May 2025 the Birch glacier collapsed and buried most of Blatten under ice, rock and mud. Scientists watching the mountain had warned in time for the 300 villagers to be evacuated. They are still working out how big a part climate change played.",
+    source: "Scientific American",
+    url: "https://www.scientificamerican.com/article/what-causes-glaciers-to-collapse-like-the-event-that-buried-a-swiss-village"
   },
   {
     topic: "Weather",
@@ -256,7 +256,7 @@ window.NEWS = [
     headline: "England's driest spring in more than 100 years",
     snapshot: "Spring 2025 was the UK's warmest and sunniest on record. In England it was the driest spring since 1893. The dry, warm weather ran straight into a record-breaking summer.",
     source: "Met Office",
-    url: "https://www.metoffice.gov.uk/blog/2025/the-met-office-year-in-weather-2025"
+    url: "https://www.metoffice.gov.uk/about-us/news-and-media/media-centre/weather-and-climate-news/2025/double-record-breaker-spring-2025-is-warmest-and-sunniest-on-uk-record"
   },
   {
     topic: "Health",
@@ -286,17 +286,17 @@ window.NEWS = [
     topic: "Energy",
     date: "Mar 2025",
     headline: "Solar panels for 200 schools and 200 NHS sites",
-    snapshot: "Great British Energy is spending £200 million on rooftop solar for about 200 schools and 200 NHS sites. The government says a typical school could save more than £25,000 a year on bills. The money saved goes back into schools and hospitals.",
-    source: "Great British Energy",
-    url: "https://www.gbe.gov.uk/blog/great-british-energy-solar-panels-cut-bills-nhs-and-schools"
+    snapshot: "Great British Energy is spending £200 million on rooftop solar for about 200 schools and 200 NHS sites. The government says a typical school could save up to £25,000 a year on bills. The money saved goes back into schools and hospitals.",
+    source: "GOV.UK",
+    url: "https://www.gov.uk/government/news/great-british-energy-to-cut-bills-for-hospitals-and-schools"
   },
   {
     topic: "Travel",
     date: "Mar 2025",
     headline: "London's roadside pollution is down by about a quarter",
-    snapshot: "Transport for London says the London-wide ULEZ cut roadside nitrogen dioxide by 27% compared with what it would have been without the zone. The biggest drop was in central London. About 97% of vehicles now seen on London's roads meet the standard.",
+    snapshot: "Transport for London says the London-wide ULEZ cut roadside nitrogen dioxide by 27% compared with what it would have been without the zone. The biggest drop was in central London. More than 97% of cars seen on London's roads now meet the standard.",
     source: "Transport for London",
-    url: "https://www.london.gov.uk/sites/default/files/2025-03/London-wide%20ULEZ%20One%20Year%20Report_Mar2025.pdf"
+    url: "https://content.tfl.gov.uk/london-wide-ulez-one-year-report.pdf"
   },
   {
     topic: "World",
@@ -312,15 +312,15 @@ window.NEWS = [
     headline: "Weather damage to homes cost insurers a record £585 million",
     snapshot: "UK insurers paid out a record £585 million in 2024 for storm, flood and frozen-pipe damage to homes and belongings. There were 12 named storms in the 2023 to 2024 season, the most in eight years.",
     source: "Association of British Insurers",
-    url: "https://www.abi.org.uk/news/news-articles/2025/2/more-action-needed-to-protect-properties-as-adverse-weather-takes-record-toll-on-insurance-claims-in-2024/"
+    url: "https://www.abi.org.uk/media-hub/news-post/more-action-needed-to-protect-properties-as-adverse-weather-takes-record-toll-on-insurance-claims-in-2024"
   },
   {
     topic: "Food & drink",
     date: "Feb 2025",
     headline: "Why chocolate costs so much",
-    snapshot: "Cocoa hit a record $12,605 a tonne in December 2024 after bad weather wrecked harvests in Ghana and Côte d'Ivoire, which grow more than half the world's cocoa. Scientists found an early 2024 heatwave in West Africa was about 4°C hotter because of climate change.",
-    source: "ECIU",
-    url: "https://eciu.net/analysis/reports/2025/climate-impacts-on-cocoa"
+    snapshot: "Cocoa prices hit record highs in 2024 after bad weather hit harvests in Ghana and Côte d'Ivoire, which grow more than half the world's cocoa. Climate Central found climate change now adds at least three weeks a year above 32°C in their main cocoa season, heat that stresses the trees.",
+    source: "Climate Central",
+    url: "https://www.climatecentral.org/report/climate-and-cocoa-2025"
   },
   {
     topic: "Food & drink",
@@ -328,7 +328,7 @@ window.NEWS = [
     headline: "The world made the least wine since 1961",
     snapshot: "Global wine production fell to about 226 million hectolitres in 2024, the lowest since 1961. Early frosts, heavy rain and drought hit vineyards. France's output fell by almost a quarter.",
     source: "OIV",
-    url: "https://www.oiv.int/sites/default/files/2025-04/EN_OIV_Press_release_State_of_the_World_Vine_and_Wine_Sector_in_2024.pdf"
+    url: "https://www.oiv.int/node/4000"
   },
   {
     topic: "World",
@@ -350,7 +350,7 @@ window.NEWS = [
     topic: "Sport",
     date: "2025",
     headline: "Storms are postponing Premier League games",
-    snapshot: "Storm Darragh in December 2024 forced the postponement of Premier League matches, Welsh rugby fixtures and horse racing. The Met Office expects UK winters to get warmer and wetter and summers hotter and drier by the 2050s, which will change how and when sport is played.",
+    snapshot: "Storm Darragh in December 2024 forced the postponement of the Merseyside derby in the Premier League, Welsh rugby fixtures and horse racing. The Met Office expects UK winters to get warmer and wetter and summers hotter and drier by the 2050s, which will change how and when sport is played.",
     source: "Met Office",
     url: "https://www.metoffice.gov.uk/blog/2025/how-extreme-weather-affects-sport-in-the-uk"
   },
@@ -358,7 +358,7 @@ window.NEWS = [
     topic: "Sport",
     date: "2025",
     headline: "Waterlogged pitches are costing grassroots sport",
-    snapshot: "The FA's chair told MPs that around 120,000 grassroots football games a season are called off because pitches can't be played on. A study for the government looks at what flooding, heat and drought already cost community sport in England.",
+    snapshot: "Sport England's chair, Chris Boardman, said 120,000 grassroots football matches were called off in a single year because pitches were flooded. A study for the government estimates that bad weather already costs grassroots sport about £320 million a year in repairs and lost income.",
     source: "GOV.UK",
     url: "https://www.gov.uk/government/publications/exploring-the-financial-implications-of-climate-change-on-grassroots-sport/exploring-the-financial-implications-of-climate-change-on-grassroots-sport"
   },
@@ -384,29 +384,29 @@ window.NEWS = [
     headline: "6.3 million properties in England are at risk of flooding",
     snapshot: "The Environment Agency's new national flood assessment puts 6.3 million homes and businesses in England in areas at risk from rivers, the sea or surface water. By the middle of the century, one property in four could be at risk.",
     source: "Environment Agency",
-    url: "https://environmentagency.blog.gov.uk/2024/12/17/transforming-our-understanding-of-flood-and-coastal-erosion-risk-in-england"
+    url: "https://www.gov.uk/government/news/environment-agency-publishes-major-update-to-national-flood-and-coastal-erosion-risk-assessment"
   },
   {
     topic: "Travel",
     date: "Nov 2024",
     headline: "Private jet emissions up 46% in four years",
-    snapshot: "A study of 18.6 million private flights found their CO2 emissions rose 46% between 2019 and 2023. Almost half the flights were shorter than 500 km. About 256,000 people, a tiny share of the world's adults, use private jets.",
+    snapshot: "A study of 18.6 million private flights found their CO2 emissions rose 46% between 2019 and 2023. Almost half the flights were shorter than 500 km. Only about a quarter of a million people, a tiny share of the world's adults, fly private.",
     source: "Communications Earth & Environment",
     url: "https://www.nature.com/articles/s43247-024-01775-z"
   },
   {
     topic: "World",
-    date: "Nov 2024",
+    date: "Feb 2026",
     headline: "Valencia's deadly floods: climate change made the rain heavier",
-    snapshot: "On 29 October 2024 the town of Chiva, near Valencia, got 320 mm of rain in about four hours, four times what the area usually gets in all of October. More than 220 people died. World Weather Attribution found climate change made the downpour about 12% heavier and twice as likely.",
+    snapshot: "On 29 October 2024 a weather station in Chiva, near Valencia, recorded 491 mm of rain in about eight hours, roughly a year's worth. More than 230 people died in Spain. A 2026 study found climate change made the most intense rain about 21% heavier.",
     source: "Scientific American",
     url: "https://www.scientificamerican.com/article/how-climate-change-made-deadly-floods-in-spain-even-worse/"
   },
   {
     topic: "Food & drink",
     date: "Oct 2024",
-    headline: "England's second-worst harvest on record",
-    snapshot: "After a record wet winter, England's 2024 wheat harvest was about a fifth smaller than in 2023. Scientists found climate change made storm rainfall that winter about 20% heavier. Farmers lost an estimated £600 million on five main crops.",
+    headline: "One of England's worst harvests on record",
+    snapshot: "After a record wet winter, England's 2024 wheat harvest was about a fifth smaller than in 2023. It was the second-worst harvest on record at the time. Scientists found climate change made storm rainfall that winter about 20% heavier. Farmers lost an estimated £600 million on five main crops.",
     source: "ECIU",
     url: "https://eciu.net/media/press-releases/2024/confirmed-england-has-second-worst-harvest-on-record-with-fears-mounting-for-2025"
   },
@@ -421,8 +421,8 @@ window.NEWS = [
   {
     topic: "World",
     date: "Sep 2024",
-    headline: "Typhoon Yagi was Vietnam's strongest storm in 70 years",
-    snapshot: "Typhoon Yagi hit northern Vietnam in September 2024. Floods and landslides left more than 300 people dead or missing. Researchers found storms like it near Vietnam are now up to 20% wetter than in past decades.",
+    headline: "Typhoon Yagi killed more than 300 people in Vietnam",
+    snapshot: "Typhoon Yagi hit northern Vietnam in September 2024. The storm, floods and landslides killed 307 people, the UN reports. Researchers found storms like it near Vietnam are now up to 20% wetter than in past decades.",
     source: "ClimaMeter",
     url: "https://www.climameter.org/20240907-08-typhoon-yagi"
   },
@@ -438,7 +438,7 @@ window.NEWS = [
     topic: "World",
     date: "Jun 2024",
     headline: "Southern Brazil got three months of rain in two weeks",
-    snapshot: "In April and May 2024 floods in Rio Grande do Sul killed more than 180 people and forced around 600,000 from their homes. World Weather Attribution found climate change made the rainfall twice as likely. Failing flood defences made the damage worse.",
+    snapshot: "In April and May 2024 floods in Rio Grande do Sul killed more than 170 people and forced around 600,000 from their homes. World Weather Attribution found climate change made the rainfall twice as likely. Failing flood defences made the damage worse.",
     source: "World Weather Attribution",
     url: "https://www.worldweatherattribution.org/climate-change-made-the-floods-in-southern-brazil-twice-as-likely/"
   },
@@ -501,8 +501,8 @@ window.NEWS = [
   {
     topic: "Home",
     date: "2022",
-    headline: "One in five UK homes already overheats",
-    snapshot: "A study for the Climate Change Committee found about 4.5 million UK homes overheat even outside heatwaves, especially small homes and top-floor flats. If the world warms by 2°C, it found 92% of existing homes would be at risk of overheating.",
+    headline: "Nine in ten UK homes could overheat at 2°C of warming",
+    snapshot: "A study for the Climate Change Committee found that if the world warms by 2°C, about nine in ten existing UK homes would be at risk of overheating. Smaller homes and flats are most at risk.",
     source: "Climate Change Committee",
     url: "https://www.theccc.org.uk/publication/addressing-overheating-risk-in-existing-uk-homes-arup/"
   },
@@ -526,9 +526,9 @@ window.NEWS = [
     topic: "Health",
     date: "2022",
     headline: "Vets see five times more dog heatstroke in heatwaves",
-    snapshot: "UK vets saw five times more heatstroke cases during heat-health alerts in summer 2022, and one in four affected dogs died. Most cases came after a walk or exercise on a hot day, far more than from dogs left in hot cars.",
-    source: "British Veterinary Association",
-    url: "https://www.bva.co.uk/news-and-blog/news-article/vets-see-five-times-more-heatstroke-cases-during-extremely-hot-weather-dog-owners-urged-to-prepare-against-summer-heat-tragedy/"
+    snapshot: "A Royal Veterinary College study of UK emergency vet records from 2022 found five times more dogs with heatstroke on days with a heat-health alert, and one in four of those dogs died. About half the cases came after a walk or exercise, far more than from dogs left in hot cars.",
+    source: "Royal Veterinary College",
+    url: "https://www.rvc.ac.uk/research/research-centres-and-facilities/veterinary-epidemiology-economics-and-public-health/news/new-research-from-the-rvc-suggests-human-heat-health-alerts-could-help-prevent-heatstroke-in-dogs"
   },
   {
     topic: "Health",
@@ -551,7 +551,7 @@ window.NEWS = [
     date: "2017",
     headline: "A rubbish truck of clothes every second",
     snapshot: "The Ellen MacArthur Foundation estimates that every second, the equivalent of a rubbish truck of clothes is burned or sent to landfill. Clothing production roughly doubled between 2000 and 2015, while the number of times each item is worn fell by about a third.",
-    source: "Ellen MacArthur Foundation",
-    url: "https://www.ellenmacarthurfoundation.org/news/one-garbage-truck-of-textiles-wasted-every-second-report-creates-vision-for-change"
+    source: "Ellen MacArthur Foundation and McKinsey",
+    url: "https://www.mckinsey.com/capabilities/sustainability/our-insights/a-new-textiles-economy-redesigning-fashions-future"
   }
 ];

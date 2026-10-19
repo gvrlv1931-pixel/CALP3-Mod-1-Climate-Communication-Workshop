@@ -5,10 +5,10 @@
   --bg: #F4F5F9;
   --surface: #FFFFFF;
   --ink: #14161F;
-  --muted: #4B5064;
+  --muted: #383D50;
   --line: #DADDE6;
   --edge: #6B7185;
-  --accent: #2C3DD6;
+  --accent: #2838C8;
   --accent-ink: #FFFFFF;
   --accent-soft: #E6E9FD;
   --shadow: 0 1px 2px rgba(20, 22, 31, 0.06), 0 8px 24px rgba(20, 22, 31, 0.06);
@@ -16,7 +16,7 @@
   /* Penalty cards: the same in both themes, like the real thing */
   --yellow: #FFD13B;
   --yellow-ink: #17140A;
-  --red: #C4122F;
+  --red: #B01029;
   --red-ink: #FFFFFF;
 
   --font-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
@@ -39,12 +39,12 @@
     --bg: #0E1016;
     --surface: #171A23;
     --ink: #ECEEF5;
-    --muted: #A3A8BC;
+    --muted: #C4C8D8;
     --line: #2A2F3D;
     --edge: #7A819A;
     --accent: #A3AEFF;
     --accent-ink: #0E1016;
-    --accent-soft: #232A52;
+    --accent-soft: #1D2244;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
     color-scheme: dark;
   }
@@ -54,12 +54,12 @@
   --bg: #0E1016;
   --surface: #171A23;
   --ink: #ECEEF5;
-  --muted: #A3A8BC;
+  --muted: #C4C8D8;
   --line: #2A2F3D;
   --edge: #7A819A;
   --accent: #A3AEFF;
   --accent-ink: #0E1016;
-  --accent-soft: #232A52;
+  --accent-soft: #1D2244;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
   color-scheme: dark;
 }
@@ -873,7 +873,7 @@ legend {
   max-height: 100%;
   background: var(--accent);
   color: var(--accent-ink);
-  overflow: hidden;
+  overflow: hidden auto;
 }
 .celebrate::backdrop { background: rgba(0, 0, 0, 0.6); }
 .confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -888,13 +888,19 @@ legend {
   padding: max(24px, env(safe-area-inset-top, 0px)) var(--gutter) max(24px, env(safe-area-inset-bottom, 0px));
   max-width: 52rem;
   margin-inline: auto;
+  container-type: inline-size;
 }
 .celebrate-inner > * { max-width: 100%; min-width: 0; }
-.celebrate h2, .pewpew h2 { overflow-wrap: anywhere; }
-.celebrate h2 {
-  font-size: clamp(2.5rem, 1.2rem + 9vw, 8.5rem);
+
+/* End-of-round titles fill the column but never split a word. The longest,
+   MESSENGER, is about 6.9em wide, so 13.5cqi leaves room to spare. The first
+   font-size is for browsers without container units. The vh cap keeps the
+   whole screen in view on a short laptop. */
+.celebrate h2, .pewpew h2 {
+  font-size: min(4.5rem, 11vw, 12vh);
+  font-size: min(7rem, 13.5cqi, 12vh);
   font-weight: 900;
-  font-variation-settings: "wdth" 125;
+  font-variation-settings: "wdth" 100;
   line-height: 0.9;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -917,26 +923,23 @@ legend {
   color: var(--ink);
 }
 .pewpew::backdrop { background: rgba(0, 0, 0, 0.6); }
-.pewpew h2 {
-  font-size: clamp(2.25rem, 0.8rem + 8vw, 7.5rem);
-  font-weight: 900;
-  font-variation-settings: "wdth" 100;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
 .pewpew .pewpew-close { background: var(--ink); color: var(--bg); }
 .pewpew .pewpew-close:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
 
-.pigeon { width: min(100%, 300px); height: auto; overflow: visible; }
-.pigeon .bird { fill: #A9AEC0; stroke: var(--ink); stroke-width: 3; }
-.pigeon .wing { fill: #8C92A8; stroke: var(--ink); stroke-width: 3; }
-.pigeon .beak { fill: #FFD13B; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; }
-.pigeon .eye, .pigeon .feet, .pigeon .letter-flap { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
-.pigeon .letter { fill: #FFFFFF; stroke: var(--ink); stroke-width: 3; }
-.pigeon .dart rect, .pigeon .dart path { fill: var(--accent); stroke: var(--ink); stroke-width: 2; }
-.pigeon .dart .cup { fill: var(--ink); }
-.pigeon .stars path { fill: #FFD13B; stroke: var(--ink); stroke-width: 1.5; }
+/* The pigeons. Their animations are SVG <animate> elements, started by app.js. */
+.pigeon { --pigeon-line: var(--ink); width: min(100%, 300px, 32vh); height: auto; overflow: visible; }
+.pigeon-happy { --pigeon-line: #14161F; }
+.pigeon .bird { fill: #A9AEC0; stroke: var(--pigeon-line); stroke-width: 3; }
+.pigeon .wing { fill: #8C92A8; stroke: var(--pigeon-line); stroke-width: 3; stroke-linejoin: round; }
+.pigeon .beak { fill: #FFD13B; stroke: var(--pigeon-line); stroke-width: 3; stroke-linejoin: round; }
+.pigeon .eye, .pigeon .feet, .pigeon .letter-flap, .pigeon .line { fill: none; stroke: var(--pigeon-line); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.pigeon .pupil { fill: var(--pigeon-line); }
+.pigeon .letter { fill: #FFFFFF; stroke: var(--pigeon-line); stroke-width: 3; }
+.pigeon .dart rect, .pigeon .dart path { fill: var(--accent); stroke: var(--pigeon-line); stroke-width: 2; }
+.pigeon .dart .cup { fill: var(--pigeon-line); }
+.pigeon .stars path, .pigeon .sparkles path { fill: #FFD13B; stroke: var(--pigeon-line); stroke-width: 1.5; stroke-linejoin: round; }
+.pigeon .burst path { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; }
+.pigeon .shadow { fill: var(--pigeon-line); opacity: 0.25; }
 .pigeon .pew {
   font-family: var(--font-display);
   font-weight: 900;
@@ -944,11 +947,6 @@ legend {
   fill: var(--accent);
 }
 .pigeon .pew-small { font-size: 20px; }
-.pewpew[open] .pigeon { animation: wobble 900ms ease-in-out 2; transform-origin: 50% 90%; }
-@keyframes wobble {
-  25% { transform: rotate(-6deg); }
-  75% { transform: rotate(6deg); }
-}
 
 /* ---------- Penalty overlay ---------- */
 .penalty {
@@ -975,6 +973,7 @@ legend {
   padding: max(24px, env(safe-area-inset-top, 0px)) var(--gutter) max(24px, env(safe-area-inset-bottom, 0px));
   max-width: 52rem;
   margin-inline: auto;
+  container-type: inline-size;
 }
 
 .penalty-kicker {
@@ -987,9 +986,10 @@ legend {
 }
 
 .penalty-inner > * { max-width: 100%; min-width: 0; }
+/* YELLOW is about 5.4em wide, so 16cqi always fits */
 .penalty h2 {
-  overflow-wrap: anywhere;
-  font-size: clamp(2.75rem, 1.2rem + 9vw, 9rem);
+  font-size: min(5.5rem, 13vw, 20vh);
+  font-size: min(9rem, 16cqi, 20vh);
   font-weight: 900;
   font-variation-settings: "wdth" 125;
   line-height: 0.9;
