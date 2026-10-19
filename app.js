@@ -3,19 +3,44 @@
 
   var NEWS = window.NEWS || [];
   var CHARACTERS = window.CHARACTERS || [];
+  var VIEWS = window.CLIMATE_VIEWS || [];
   var TALK_SECONDS = 5 * 60;
 
   function $(id) { return document.getElementById(id); }
 
+  // Spread the bits of a 32-bit number (the murmur3 finaliser)
+  function mix(h) {
+    h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b);
+    h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35);
+    h ^= h >>> 16;
+    return h >>> 0;
+  }
+
+  // A random whole number from 0 to max - 1. Math.random alone is not enough:
+  // some page viewers make it repeat, and then every phone draws the same first
+  // card. So the browser's crypto source and the moment of the tap go in too.
+  function randomInt(max) {
+    var r = Math.floor(Math.random() * 4294967296);
+    try {
+      var buf = new Uint32Array(1);
+      window.crypto.getRandomValues(buf);
+      r ^= buf[0];
+    } catch (e) { /* no crypto: Math.random and the clock still vary */ }
+    var tap = window.performance && performance.now ? performance.now() * 1000 : 0;
+    r = mix(r ^ mix(Date.now() % 4294967296) ^ mix(Math.floor(tap % 4294967296)));
+    return r % max;
+  }
+
   // A shuffled deck: every card comes up once before any card repeats.
+  // It is shuffled at the first draw, so the tap itself feeds the shuffle.
   function makeDeck(size) {
     var order = [];
-    var pos = 0;
+    var pos = size;
     function shuffle(avoidFirst) {
       order = [];
       for (var i = 0; i < size; i++) order.push(i);
       for (var j = size - 1; j > 0; j--) {
-        var k = Math.floor(Math.random() * (j + 1));
+        var k = randomInt(j + 1);
         var t = order[j]; order[j] = order[k]; order[k] = t;
       }
       if (size > 1 && order[0] === avoidFirst) {
@@ -23,11 +48,10 @@
       }
       pos = 0;
     }
-    shuffle(-1);
     return {
       size: size,
       next: function () {
-        if (pos >= size) shuffle(order[size - 1]);
+        if (pos >= size) shuffle(order.length ? order[size - 1] : -1);
         var index = order[pos];
         pos += 1;
         return { index: index, position: pos };
@@ -47,7 +71,7 @@
   var headings = {
     news: $("news-headline"),
     character: $("char-name"),
-    referee: $("clock-title")
+    referee: $("refchar-title")
   };
   var roleButtons = Array.prototype.slice.call(document.querySelectorAll(".role"));
 
@@ -101,10 +125,9 @@
 
   // ---------- Character ----------
   var STAT_INFO = [
-    { key: "scepticism", name: "Scepticism", desc: "How hard they push back" },
-    { key: "time", name: "Time", desc: "How much spare time they have" },
-    { key: "wallet", name: "Wallet", desc: "How much they can spend" },
-    { key: "reach", name: "Reach", desc: "How many people listen to them" }
+    { key: "time", name: "Time" },
+    { key: "wallet", name: "Wallet" },
+    { key: "reach", name: "Reach" }
   ];
 
   function fillList(ul, items) {
@@ -116,8 +139,7 @@
     });
   }
 
-  function renderStats(stats) {
-    var dl = $("char-stats");
+  function renderStats(dl, stats) {
     dl.textContent = "";
     STAT_INFO.forEach(function (info) {
       var value = stats[info.key];
@@ -125,14 +147,7 @@
       wrap.className = "stat";
 
       var dt = document.createElement("dt");
-      var name = document.createElement("span");
-      name.className = "stat-name";
-      name.textContent = info.name;
-      var desc = document.createElement("span");
-      desc.className = "stat-desc";
-      desc.textContent = info.desc;
-      dt.appendChild(name);
-      dt.appendChild(desc);
+      dt.textContent = info.name;
 
       var dd = document.createElement("dd");
       var pips = document.createElement("span");
@@ -144,7 +159,7 @@
         pips.appendChild(pip);
       }
       var score = document.createElement("span");
-      score.className = "score";
+      score.className = "visually-hidden";
       score.textContent = value + " of 5";
       dd.appendChild(pips);
       dd.appendChild(score);
@@ -155,10 +170,50 @@
     });
   }
 
+  function viewIndex(key) {
+    for (var i = 0; i < VIEWS.length; i++) if (VIEWS[i].key === key) return i;
+    return -1;
+  }
+
+  // One copy of the hidden side for the character card, one for the referee kit
+  function makeHiddenSide() {
+    return $("hidden-side").content.firstElementChild.cloneNode(true);
+  }
+
+  function fillHiddenSide(side, c) {
+    function f(name) { return side.querySelector('[data-f="' + name + '"]'); }
+    var index = viewIndex(c.view);
+    var view = VIEWS[index] || { name: "Not set", play: "", tip: "" };
+    f("view-name").textContent = view.name;
+    f("view-pos").textContent = index < 0 ? "" : ", " + (index + 1) + " of " + VIEWS.length + ", from " + VIEWS[0].name + " to " + VIEWS[VIEWS.length - 1].name;
+    var scale = f("view-scale");
+    scale.textContent = "";
+    VIEWS.forEach(function (v, i) {
+      var step = document.createElement("span");
+      if (i === index) step.className = "on";
+      scale.appendChild(step);
+    });
+    if (VIEWS.length) {
+      f("view-first").textContent = VIEWS[0].name;
+      f("view-last").textContent = VIEWS[VIEWS.length - 1].name;
+    }
+    f("view-play").textContent = view.play;
+    var tip = f("view-tip");
+    if (tip) tip.textContent = view.tip ? "What tends to work: " + view.tip : "";
+    renderStats(f("stats"), c.stats);
+    fillList(f("triggers"), c.triggers);
+    fillList(f("doors"), c.doorOpeners);
+  }
+
+  // The character plays their view; the newsbearer tip is for the referee only
+  var charSide = makeHiddenSide();
+  charSide.querySelector('[data-f="view-tip"]').remove();
+  $("secret-body").appendChild(charSide);
+
   function setSecret(open) {
     $("secret-toggle").setAttribute("aria-expanded", open ? "true" : "false");
     $("secret-body").hidden = !open;
-    $("secret-label").textContent = open ? "Hide triggers and door openers" : "Show triggers and door openers";
+    $("secret-label").textContent = open ? "Hide your hidden side" : "Show your hidden side";
   }
 
   function drawCharacter() {
@@ -171,18 +226,23 @@
     $("char-role").textContent = c.role;
     $("char-place").textContent = c.place;
     $("char-tagline").textContent = c.tagline;
+    $("char-scene").textContent = c.scene;
     $("char-opening").textContent = c.openingLine;
     $("char-never").textContent = c.neverWithout;
-    renderStats(c.stats);
-    fillList($("char-triggers"), c.triggers);
-    fillList($("char-doors"), c.doorOpeners);
+    fillHiddenSide(charSide, c);
     setSecret(false);
     $("char-count").textContent = "Character " + draw.position + " of " + charDeck.size;
     restartAnimation(panels.character);
   }
 
   $("secret-toggle").addEventListener("click", function () {
-    setSecret(this.getAttribute("aria-expanded") !== "true");
+    var open = this.getAttribute("aria-expanded") !== "true";
+    setSecret(open);
+    // Bring the whole hidden side into view, so the character sees how to react without scrolling
+    if (open) {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.querySelector(".secret").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+    }
   });
 
   $("char-next").addEventListener("click", function () {
@@ -195,6 +255,126 @@
     void el.offsetWidth;
     el.style.animation = "";
   }
+
+  // ---------- Referee: look up the character ----------
+  var refInput = $("ref-char-input");
+  var refSide = makeHiddenSide();
+  $("ref-char-body").appendChild(refSide);
+  var REF_HINT = $("ref-char-status").textContent;
+  var MAX_MATCHES = 8;
+
+  CHARACTERS.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (c) {
+    var option = document.createElement("option");
+    option.value = c.name;
+    $("ref-char-list").appendChild(option);
+  });
+
+  // Lower case, no accents or quotes, single spaces: "Steve \"Big Steve\" Murray" -> "steve big steve murray"
+  function plain(text) {
+    var s = String(text).toLowerCase();
+    if (s.normalize) s = s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    return s.replace(/["'‘’“”.,]/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  // Every typed word must start a word in the text, so "big st" finds Big Steve
+  function wordsMatch(text, query) {
+    var words = plain(text).split(" ");
+    return plain(query).split(" ").every(function (part) {
+      return words.some(function (w) { return w.indexOf(part) === 0; });
+    });
+  }
+
+  function findCharacters(query) {
+    var q = plain(query);
+    if (!q) return [];
+    var exact = CHARACTERS.filter(function (c) { return plain(c.name) === q; });
+    if (exact.length) return exact;
+    var byName = CHARACTERS.filter(function (c) { return wordsMatch(c.name, q); });
+    if (byName.length) return byName;
+    return CHARACTERS.filter(function (c) { return wordsMatch(c.role + " " + c.place, q); });
+  }
+
+  function showRefCharacter(c) {
+    $("ref-char-name").textContent = c.name;
+    $("ref-char-meta").textContent = c.pronouns + ", age " + c.age + ". " + c.role + ", " + c.place + ".";
+    fillHiddenSide(refSide, c);
+    $("ref-char-body").hidden = false;
+  }
+
+  function renderMatches(list) {
+    var ul = $("ref-char-matches");
+    ul.textContent = "";
+    list.forEach(function (c) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "match";
+      var name = document.createElement("span");
+      name.className = "match-name";
+      name.textContent = c.name;
+      var where = document.createElement("span");
+      where.className = "match-where";
+      var gap = document.createElement("span");
+      gap.className = "visually-hidden";
+      gap.textContent = ", ";
+      where.appendChild(gap);
+      where.appendChild(document.createTextNode(c.role + ", " + c.place));
+      btn.appendChild(name);
+      btn.appendChild(where);
+      btn.addEventListener("click", function () {
+        refInput.value = c.name;
+        lookUpCharacter();
+        $("ref-char-name").focus();
+      });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    });
+    ul.hidden = list.length === 0;
+  }
+
+  function lookUpCharacter() {
+    var typed = refInput.value.trim();
+    var found = findCharacters(typed);
+    var status = $("ref-char-status");
+    $("ref-char-body").hidden = true;
+    renderMatches([]);
+    if (!typed) {
+      status.textContent = REF_HINT;
+    } else if (found.length === 1) {
+      showRefCharacter(found[0]);
+      status.textContent = "Showing " + found[0].name + ".";
+    } else if (!found.length) {
+      status.textContent = "No character called “" + typed + "”. Check the spelling, or ask to see their card.";
+    } else if (found.length > MAX_MATCHES) {
+      status.textContent = found.length + " characters match. Keep typing.";
+    } else {
+      status.textContent = found.length + " characters match. Pick one.";
+      renderMatches(found);
+    }
+  }
+
+  refInput.addEventListener("input", lookUpCharacter);
+
+  function resetRefCharacter() {
+    refInput.value = "";
+    lookUpCharacter();
+  }
+
+  // ---------- Rules: the six climate views ----------
+  VIEWS.forEach(function (v) {
+    var li = document.createElement("li");
+    var name = document.createElement("strong");
+    name.textContent = v.name;
+    var play = document.createElement("span");
+    play.textContent = "“" + v.play + "”";
+    var tip = document.createElement("span");
+    tip.className = "view-tip";
+    tip.textContent = "What tends to work: " + v.tip;
+    li.appendChild(name);
+    li.appendChild(play);
+    li.appendChild(tip);
+    $("views-list").appendChild(li);
+  });
 
   // ---------- Referee: clock ----------
   var remaining = TALK_SECONDS;
@@ -411,7 +591,7 @@
 
   // ---------- Referee: verdict ----------
   var form = $("verdict-form");
-  var REQUIRED = ["v-why", "v-world", "v-thing", "v-motive", "v-means", "v-opportunity"];
+  var REQUIRED = ["v-connect", "v-why", "v-thing", "v-motive", "v-means", "v-opportunity"];
   var celebrated = false;
 
   function updateVerdict() {
@@ -574,10 +754,11 @@
     scoreLog = [];
     celebrated = false;
     resetClock();
+    resetRefCharacter();
     renderTally();
     renderScore();
-    announce("New round. Clock, cards and score reset.");
-    $("clock-title").focus();
+    announce("New round. Character, clock, cards and score reset.");
+    $("refchar-title").focus();
   });
 
   renderScore();
