@@ -27,7 +27,7 @@ window.CLIMATE_VIEWS = [
     key: "concerned",
     name: "Concerned",
     play: "You think it's real and serious, but it feels far off. Other things come first.",
-    tip: "Bring it close to home: their street, their people, this year."
+    tip: "Bring it close to home: what is changing on their street, this year."
   },
   {
     key: "cautious",
@@ -494,12 +494,12 @@ window.CHARACTERS = [
   {
     name: "Isla Grant",
     pronouns: "she/her",
-    age: 19,
-    role: "Environmental science student",
+    age: 22,
+    role: "Final-year environmental science student",
     place: "Stirling",
     tagline: "Organised her school's climate strikes at 15. Now she's not sure any of it made a difference.",
     scene: "You're both stuck on the platform. The train's delayed again.",
-    openingLine: "Honestly? I've done the marches. Nothing changes. What's even the point?",
+    openingLine: "I've done the marches, you know. Nothing changes. What's even the point?",
     neverWithout: "A tote bag of badges she doesn't wear any more",
     view: "alarmed",
     stats: { time: 3, wallet: 1, reach: 4 },
